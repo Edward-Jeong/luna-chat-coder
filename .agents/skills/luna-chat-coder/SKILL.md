@@ -1,6 +1,6 @@
 ---
 name: luna-chat-coder
-description: Keep repository development reliable from chat: use the sandbox work container first, recover exact GitHub state, and use bounded Actions missions when normal sandbox or GitHub paths are insufficient.
+description: Keep repository development reliable from chat by using the sandbox work container first, recovering exact GitHub state, and using bounded Actions missions when normal sandbox or GitHub paths are insufficient.
 license: MIT
 compatibility: Requires access to durable repository state. The fully specified ChatGPT Web path requires both the GitHub Plugin and the ChatGPT Codex Connector GitHub App for the target repository. GitHub Actions access is required only when an Actions mission is needed. Other Agent Skills hosts may use the core policy only to the extent that equivalent capabilities actually exist.
 metadata:
