@@ -76,6 +76,14 @@ Do not dispatch a mission merely because Actions exists. Do not abandon a connec
 
 The common capability case is a **supply mission**: a networked runner obtains or prepares a required dependency, runtime, SDK, compiler, native library, generated input, cache, archive, or other external build input and returns a verified artifact. After the missing capability is supplied, return to the sandbox engineering loop.
 
+### Distinguish acquisition gaps from execution gaps
+
+If the sandbox can faithfully execute a required capability once the necessary bytes are available, prefer a supply mission that obtains or prepares those bytes and returns them to the sandbox. Do not move the engineering loop to Actions merely because the sandbox cannot download or initially install a required tool or service.
+
+For example, if the repository requires PostgreSQL and the sandbox can run PostgreSQL but cannot obtain the required packages or distribution, use a supply mission to acquire a compatible PostgreSQL distribution or installation payload, verify it in the sandbox, install and start PostgreSQL there, and continue migrations, application execution, tests, and debugging in the sandbox.
+
+Use remote execution only when the sandbox cannot faithfully execute the required capability even after the necessary inputs have been supplied, or when the sandbox itself cannot sustain the task.
+
 If the sandbox work container itself is unavailable or cannot sustain the task because of platform usage limits, execution-duration limits, resource limits, missing execution capability, or another hard environment constraint, enter **degraded remote mode**. Continue with bounded Actions missions that perform only the necessary editing, build, test, packaging, or verification steps, using GitHub commits/branches/artifacts as durable state between missions.
 
 Degraded remote mode is a fallback, not the preferred environment. Tell the user in the next meaningful user-visible update or final report that sandbox execution was unavailable or insufficient and that the work continued through GitHub Actions. Do not speculate about billing. If an operation would require an explicitly paid or materially costly resource beyond ordinary configured Actions use, obtain the user's approval before creating that cost.
