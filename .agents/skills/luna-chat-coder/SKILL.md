@@ -100,9 +100,9 @@ Choose the lowest-overhead path that remains exact and reliable for the observed
 
 Capture the expected base SHA before substantial publication work. If the base moved, recover the new durable state and deliberately rebase, merge, or recreate the payload. Do not reconstruct a substantial verified change from prose when exact source bytes can be transported.
 
-Model-mediated reconstruction or serialization of long publication payloads can introduce unintended byte-level drift even when the intended source is unchanged. When a published file or object does not match its expected hash, treat that mismatch as publication/transport evidence before assuming the source or publication strategy is wrong.
+Model-mediated reconstruction or serialization of publication payloads can introduce unintended byte-level drift even when the intended source is unchanged. When a published file or object differs from the verified source, consider the publication path itself as a possible cause before assuming the source or overall publication strategy is wrong.
 
-If the strategy remains appropriate, retry only the failed file or object from the exact sandbox or durable-source bytes. Prefer binary-safe or exact-byte transports such as direct blob/object operations, base64 derived from the source bytes, or a checksummed patch/bundle, and verify the remote result against the expected Git/blob hash. Do not regenerate a long payload from prose, and do not rewrite files or objects whose hashes already match. A small bounded retry is reasonable when the retry preserves the same exact source bytes or improves the transport path; repeated mismatches should trigger a different exact transport or an explicit blocker rather than blind regeneration.
+If the strategy still appears appropriate, a limited retry of only the failed payload may be reasonable. Preserve the verified source rather than reconstructing it unnecessarily, avoid disturbing outputs that are already known to be correct, and use available integrity evidence to confirm the result when practical. If the failure persists, reassess the transport or report the blocker rather than repeating the same operation blindly.
 
 ## Recovery
 
