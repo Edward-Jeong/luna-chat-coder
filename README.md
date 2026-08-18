@@ -2,7 +2,7 @@
 
 [한국어 README](README.ko.md)
 
-**Version 0.1.0**
+**Version 0.1.1**
 
 > AI agents working from this repository should read [`AGENTS.md`](AGENTS.md) first.
 
@@ -27,7 +27,7 @@ For an existing repository, see [Add to an existing repository](#add-to-an-exist
 
 ## What Luna does automatically
 
-On substantial repository work, the model should quietly:
+On repository work, the model should quietly:
 
 1. read `AGENTS.md` and the embedded `SKILL.md`;
 2. identify the exact repository/PR/commit state and inspect any surviving sandbox work;
@@ -130,7 +130,7 @@ The template deliberately separates discovery, runtime policy, operational detai
 ```text
 AGENTS.md
     -> small repository entry point
-    -> tells the model to read the skill before substantial chat-based development
+    -> tells the model to read the skill before chat-based development
 
 .agents/skills/luna-chat-coder/
   SKILL.md

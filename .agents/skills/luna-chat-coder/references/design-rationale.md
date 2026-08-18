@@ -48,7 +48,7 @@ The design principle is:
 
 > **Discover early, activate late.**
 
-The model should know Luna exists before substantial work begins, but loading Luna must not itself trigger Actions, remote state, or extra ceremony.
+The model should know Luna exists before repository work begins, but loading Luna must not itself trigger Actions, remote state, or extra ceremony.
 
 ## 3. What Luna is and is not
 

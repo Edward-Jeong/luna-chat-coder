@@ -2,7 +2,7 @@
 
 [English README](README.md)
 
-**Version 0.1.0**
+**Version 0.1.1**
 
 > 이 리포지토리에서 작업하는 AI agent는 먼저 [`AGENTS.md`](AGENTS.md)를 읽어야 합니다.
 
@@ -27,7 +27,7 @@ Luna Chat Coder는 일반 chat에서 신뢰할 수 있는 software development�
 
 ## Luna가 자동으로 하는 일
 
-상당한 리포지토리 작업을 시작하면 모델은 조용히 다음을 수행해야 합니다.
+리포지토리 작업을 시작하면 모델은 조용히 다음을 수행해야 합니다.
 
 1. `AGENTS.md`와 내장 `SKILL.md`를 읽습니다.
 2. 정확한 리포지토리/PR/commit state를 식별하고 남아 있는 샌드박스 작업을 확인합니다.
@@ -130,7 +130,7 @@ Template은 discovery, runtime policy, operational detail, maintainer memory를 
 ```text
 AGENTS.md
     -> 작은 repository entry point
-    -> substantial chat-based development 전에 skill을 읽도록 모델을 안내
+    -> chat-based development 전에 skill을 읽도록 모델을 안내
 
 .agents/skills/luna-chat-coder/
   SKILL.md
