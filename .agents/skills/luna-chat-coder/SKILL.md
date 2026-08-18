@@ -100,6 +100,10 @@ Choose the lowest-overhead path that remains exact and reliable for the observed
 
 Capture the expected base SHA before substantial publication work. If the base moved, recover the new durable state and deliberately rebase, merge, or recreate the payload. Do not reconstruct a substantial verified change from prose when exact source bytes can be transported.
 
+Model-mediated reconstruction or serialization of publication payloads can introduce unintended byte-level drift even when the intended source is unchanged. When a published file or object differs from the verified source, consider the publication path itself as a possible cause before assuming the source or overall publication strategy is wrong.
+
+If the strategy still appears appropriate, a limited retry of only the failed payload may be reasonable. Preserve the verified source rather than reconstructing it unnecessarily, avoid disturbing outputs that are already known to be correct, and use available integrity evidence to confirm the result when practical. If the failure persists, reassess the transport or report the blocker rather than repeating the same operation blindly.
+
 ## Recovery
 
 After a chat reset, sandbox loss, or source-identity ambiguity, read [`references/recovery.md`](references/recovery.md).
