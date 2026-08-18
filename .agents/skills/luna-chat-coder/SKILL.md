@@ -4,7 +4,7 @@ description: Keep repository development reliable from chat by using the sandbox
 license: MIT
 compatibility: Requires access to durable repository state. The fully specified ChatGPT Web path requires both the GitHub Plugin and the ChatGPT Codex Connector GitHub App for the target repository. GitHub Actions access is required only when an Actions mission is needed. Other Agent Skills hosts may use the core policy only to the extent that equivalent capabilities actually exist.
 metadata:
-  version: "0.1.0"
+  version: "0.1.1"
 ---
 
 # Luna Chat Coder
@@ -24,7 +24,7 @@ Do not use `local container`, `local environment`, or `bridge` for these concept
 
 ## Core invariants
 
-1. **Discover early, activate late.** Load this policy before substantial repository work, but do not use Actions merely because the skill is present.
+1. **Discover early, activate late.** Load this policy before repository work, but do not use Actions merely because the skill is present.
 2. **Materialize exact source before editing.** When a target GitHub repository is given, resolve the intended commit or PR-head SHA and establish a complete working tree for that exact state inside the sandbox before source edits, builds, tests, or iterative debugging. Inspect surviving sandbox work before replacing it. Prefer normal Git clone/fetch/checkout when the sandbox can reach the repository; otherwise use another exact repository read/archive transport that preserves the required files and identity. Verify the materialized state corresponds to the expected SHA before modifying it.
 3. **Sandbox first.** Prefer the sandbox work container for source inspection, editing, building, testing, linting, formatting, running services, and iterative debugging once the exact target source has been materialized there.
 4. **Inventory before acquiring.** Inspect capabilities already present in the sandbox before installing, downloading, or dispatching a mission.
@@ -39,7 +39,7 @@ Do not use `local container`, `local environment`, or `bridge` for these concept
 
 ## Silent readiness preflight
 
-Before substantial work, perform the smallest useful preflight without making the user operate a checklist:
+Before repository work, perform the smallest useful preflight without making the user operate a checklist:
 
 1. identify the repository, task/PR if any, and expected commit SHA when available;
 2. inspect any surviving sandbox workspace before replacing or merging it;
