@@ -1,6 +1,6 @@
 # Luna Agent Teams
 
-Luna Chat Coder includes three operational teams inspired by the role-separation patterns in `Edward-Jeong/agency-agents`, adapted to Luna's exact-state and evidence-first workflow.
+Luna Chat Coder includes three operational teams plus **Luna Router**, an automatic natural-language dispatcher inspired by the role-separation patterns in `Edward-Jeong/agency-agents` and adapted to Luna's exact-state and evidence-first workflow.
 
 ## Architecture
 
@@ -8,7 +8,7 @@ Luna Chat Coder includes three operational teams inspired by the role-separation
 Natural-language task
         |
         v
-Luna Agent Team routing
+   Luna Router
         |
         +-- Coding Team
         |     Software Architect
@@ -30,7 +30,36 @@ Luna Agent Team routing
               Root Cause Analyst
 ```
 
-Luna Chat Coder remains the continuity/exact-state layer. Agent Teams decide who should reason about the work; the repository still decides how the software is built and verified.
+Luna Chat Coder remains the continuity/exact-state layer. Luna Router decides who should reason about the work; the repository still decides how the software is built and verified.
+
+## Luna Router v1
+
+Users normally describe the task in natural language and do not choose a team. Router selects exactly one lead team plus the minimum supporting specialists.
+
+Default decision order:
+
+```text
+Existing failure / degradation?
+    -> Incident Analysis
+
+Security assurance / risk reduction is the main outcome?
+    -> Security
+
+Planned creation or repository behavior change?
+    -> Coding
+```
+
+Routing is semantic rather than keyword-based. A security product UI feature remains Coding-led; an unexplained live failure remains Incident-led even when a code fix may eventually be required.
+
+Mixed tasks use handoffs rather than loading every team. Examples:
+
+- New OAuth feature -> Coding lead + Security support.
+- SAST finding requiring remediation -> Security finding -> Coding fix -> Security verification.
+- Production outage likely caused by code -> Incident diagnosis -> Coding after defect isolation.
+- Suspected compromise plus outage -> Incident lead + Security support with evidence preservation.
+
+Canonical policy: `.agents/skills/luna-agent-teams/references/routing.md`  
+Regression matrix: `.agents/skills/luna-agent-teams/references/router-evaluation.md`
 
 ## Coding Team
 
@@ -91,7 +120,11 @@ powershell -ExecutionPolicy Bypass -File .\scripts\install-codex-agents.ps1
 
 The installer copies the agents to `~/.codex/agents/` or `$CODEX_HOME/agents`.
 
-Recommended entry agents:
+Recommended normal entry point:
+
+- `Luna Router`
+
+Direct specialist/team entry points remain available:
 
 - `Luna Coding Team`
 - `Luna Code Reviewer`
@@ -102,11 +135,11 @@ Recommended entry agents:
 
 | Request | Routing |
 | --- | --- |
-| Build a new vulnerability dashboard | Coding Team + Security role during architecture |
-| Review this PR for auth bypass | Security Team + Code Reviewer if source quality also matters |
-| RHEL agent can reach manager but reverse connection fails | Incident Analysis Team / infrastructure role |
-| Spring bean fails after DB migration | Incident Analysis Team / application + database roles |
-| Implement a confirmed defect fix | Incident Analysis -> Coding Team -> Test -> Code Reviewer |
+| Build a new vulnerability dashboard | Coding lead + Security Architect during architecture |
+| Review this PR for auth bypass | Security lead + AppSec + Security Reviewer |
+| RHEL agent can reach manager but reverse connection fails | Incident lead + Infrastructure Diagnostician |
+| Spring bean fails after DB migration | Incident lead + Application + Database Diagnostician |
+| Implement a confirmed defect fix | Coding lead + Test + Code Reviewer |
 
 ## Source attribution
 
