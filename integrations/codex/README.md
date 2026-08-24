@@ -38,6 +38,15 @@ Use Luna Router: Analyze this SAST High finding and implement a verified remedia
 
 The user does not need to choose Coding, Security, or Incident Analysis manually.
 
+## Execution model
+
+Luna Router does not depend on one specific Codex orchestration primitive. It operates in two modes:
+
+- When the host supports reliable named-agent/subagent delegation, Router delegates bounded phases to the selected Luna team or specialist and synthesizes the result.
+- When delegation is unavailable or uncertain, Router performs the selected workflow itself using the repository-local Luna Agent Teams skill and routing policy.
+
+This keeps the Router usable as the single entry point across Codex surfaces without requiring the user to re-invoke a different agent manually.
+
 ## Agents
 
 - `Luna Router` — semantic natural-language routing and cross-team handoff.
