@@ -1,15 +1,27 @@
 ---
 name: luna-agent-teams
-description: Route repository work through Luna's Coding, Security, and Incident Analysis teams while preserving Luna Chat Coder's exact-state and evidence policies.
+description: Automatically route repository work through Luna's Coding, Security, and Incident Analysis teams while preserving Luna Chat Coder's exact-state and evidence policies.
 license: MIT
 compatibility: Designed for Agent Skills hosts and Codex custom agents.
 metadata:
-  version: "0.1.0"
+  version: "0.2.0"
 ---
 
 # Luna Agent Teams
 
-This skill adds role-based engineering teams on top of Luna Chat Coder. It does not replace `.agents/skills/luna-chat-coder/SKILL.md`; Luna Chat Coder remains the source-of-truth, sandbox, publication, recovery, and evidence policy.
+This skill adds automatic role-based engineering routing on top of Luna Chat Coder. It does not replace `.agents/skills/luna-chat-coder/SKILL.md`; Luna Chat Coder remains the source-of-truth, sandbox, publication, recovery, and evidence policy.
+
+## Automatic routing
+
+Before substantive development, security, or incident work, apply `references/routing.md` and select:
+
+- one **lead team**: Coding, Security, or Incident Analysis;
+- the minimum useful **supporting team(s)** only when a real boundary is crossed;
+- the minimum useful **specialist roles** inside those teams.
+
+Routing is Luna's responsibility. Do not ask the user to choose a team when their intent is inferable. Route by dominant outcome, current system state, risk, and required action rather than keyword matching.
+
+The routing decision is normally silent. Explain it only when a handoff, safety boundary, mixed-team workflow, or readiness decision materially benefits from being visible.
 
 ## Operating model
 
@@ -20,6 +32,16 @@ Use the smallest team that can complete the task safely. Do not invoke every spe
 - **Incident Analysis Team** — evidence-driven diagnosis, layer isolation, root-cause analysis, recovery and prevention.
 
 The primary agent owns the final answer and repository state. Specialists advise or execute bounded work; they do not independently redefine scope, architecture, or acceptance criteria.
+
+## Routing precedence
+
+Use this default precedence when objectives overlap:
+
+1. **Existing failure/degradation** -> Incident Analysis owns diagnosis/recovery first.
+2. **Security assurance/risk reduction as the primary outcome** -> Security owns the finding/acceptance criteria.
+3. **Planned creation/change to repository behavior** -> Coding owns delivery.
+
+This is not a rigid team hierarchy. For example, a new OAuth feature remains Coding-led with Security support, while an unexplained authentication outage remains Incident-led even if the eventual fix is code.
 
 ## Coding Team protocol
 
@@ -65,8 +87,16 @@ A blocker finding prevents the team from presenting the change as ready for merg
 - Incident → Security when compromise, malicious activity, suspicious authentication, secret exposure, or exploit evidence appears.
 - Security → Incident when containment, forensic preservation, or production recovery is required.
 
+At a handoff, preserve observed facts, exact repository state, checks already run, evidence locations, ruled-out hypotheses, constraints, open risks, and the next team's objective. Do not reset the investigation merely because the team changes.
+
+## Ambiguity rule
+
+- **High confidence**: route and proceed.
+- **Medium confidence**: select the team that owns the current state/risk, add support if needed, and proceed without asking solely to choose an agent.
+- **Low confidence**: begin safe read-only analysis when possible. Ask only for a fact whose absence makes the next action materially unsafe, unauthorized, destructive, or scope-changing.
+
 ## Completion gate
 
 Before calling work complete, state the exact repository/branch/commit or PR state changed, team roles materially used, checks that actually ran, unresolved blockers or risks, and whether the work is merge-ready, review-ready, or diagnostic-only.
 
-Read `references/routing.md` for detailed routing rules.
+Read `references/routing.md` for the canonical Luna Router v1 decision contract and evaluation examples.
