@@ -7,13 +7,13 @@ This directory contains ready-to-install Codex custom agents for Luna's Coding, 
 macOS/Linux:
 
 ```bash
-./scripts/install-codex-agents.sh
+bash scripts/install-codex-agents.sh
 ```
 
 Windows PowerShell:
 
 ```powershell
-./scripts/install-codex-agents.ps1
+powershell -ExecutionPolicy Bypass -File .\scripts\install-codex-agents.ps1
 ```
 
 The scripts validate the required TOML fields and copy the agents to `~/.codex/agents/` or `$CODEX_HOME/agents`.
