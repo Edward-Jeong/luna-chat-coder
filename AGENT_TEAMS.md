@@ -80,13 +80,13 @@ Ready-to-install custom agents are under `integrations/codex/agents/`.
 ### macOS / Linux
 
 ```bash
-./scripts/install-codex-agents.sh
+bash scripts/install-codex-agents.sh
 ```
 
 ### Windows PowerShell
 
 ```powershell
-./scripts/install-codex-agents.ps1
+powershell -ExecutionPolicy Bypass -File .\scripts\install-codex-agents.ps1
 ```
 
 The installer copies the agents to `~/.codex/agents/` or `$CODEX_HOME/agents`.
