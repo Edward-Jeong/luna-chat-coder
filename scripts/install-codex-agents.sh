@@ -10,21 +10,23 @@ if [[ ! -d "$SRC" ]]; then
   exit 1
 fi
 
-python3 - "$SRC" <<'PY'
-import pathlib, sys, tomllib
-root = pathlib.Path(sys.argv[1])
-files = sorted(root.glob("*.toml"))
-if not files:
-    raise SystemExit("No Codex agent TOML files found")
-required = {"name", "description", "developer_instructions"}
-for path in files:
-    data = tomllib.loads(path.read_text(encoding="utf-8"))
-    missing = required - data.keys()
-    if missing:
-        raise SystemExit(f"{path.name}: missing {sorted(missing)}")
-print(f"Validated {len(files)} Codex agents")
-PY
+shopt -s nullglob
+files=("$SRC"/*.toml)
+if (( ${#files[@]} == 0 )); then
+  echo "No Codex agent TOML files found" >&2
+  exit 1
+fi
 
+for file in "${files[@]}"; do
+  for required in name description developer_instructions; do
+    if ! grep -Eq "^[[:space:]]*${required}[[:space:]]*=" "$file"; then
+      echo "$(basename "$file"): missing $required" >&2
+      exit 1
+    fi
+  done
+done
+
+echo "Validated ${#files[@]} Codex agents"
 mkdir -p "$DEST"
-cp "$SRC"/*.toml "$DEST"/
+cp "${files[@]}" "$DEST"/
 echo "Installed Luna Codex agents to $DEST"
