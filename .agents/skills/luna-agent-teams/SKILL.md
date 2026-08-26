@@ -4,12 +4,14 @@ description: Automatically route repository work through Luna's Coding, Security
 license: MIT
 compatibility: Designed for Agent Skills hosts and Codex custom agents.
 metadata:
-  version: "0.2.0"
+  version: "0.3.0"
 ---
 
 # Luna Agent Teams
 
 This skill adds automatic role-based engineering routing on top of Luna Chat Coder. It does not replace `.agents/skills/luna-chat-coder/SKILL.md`; Luna Chat Coder remains the source-of-truth, sandbox, publication, recovery, and evidence policy.
+
+For material repository work, pair this routing layer with `.agents/skills/luna-quality-engineering/SKILL.md`. Agent Teams decides who owns the work; Quality Engineering decides which evidence-driven quality gates are needed before readiness can be claimed.
 
 ## Automatic routing
 
@@ -47,37 +49,40 @@ This is not a rigid team hierarchy. For example, a new OAuth feature remains Cod
 
 For a new project or material feature, follow this order unless the repository requires a stricter process:
 
-1. Requirements — convert natural-language intent into outcomes, constraints, non-goals, and acceptance criteria.
-2. Architecture decision — define module boundaries, data/API contracts, deployment shape, failure modes, and security-sensitive boundaries. Challenge structurally risky requests before implementation and propose a better alternative with reasons.
+1. Requirements — convert natural-language intent into outcomes, constraints, non-goals, and acceptance criteria, then run the Quality Engineering `requirement-check` gate.
+2. Architecture decision — define module boundaries, data/API contracts, deployment shape, failure modes, and security-sensitive boundaries. Challenge structurally risky requests before implementation and propose a better alternative with reasons. For consequential boundaries, apply `multi-lens-review`.
 3. Repository/template — create or select only after the architecture is coherent.
 4. Feature branch — work from an exact durable base and use a task-owned feature branch.
 5. Implementation — make the smallest coherent change and preserve repository conventions/contracts.
-6. Tests and verification — run repository-defined unit, integration, E2E, lint, build, migration, or service checks that materially apply.
-7. Code review — independently review correctness, security, maintainability, performance, compatibility, and test adequacy. Classify findings as blocker, suggestion, or nit.
-8. GitHub publication — publish exact verified changes.
-9. Pull request — summarize design, behavior, tests, risks, and follow-ups. Do not claim checks that did not run.
+6. Quality self-review — apply the Quality Engineering `self-review` gate and any targeted `fresh-eyes-review`, `ssot-audit`, `clean-rebuild`, or `fact-check` gate that materially improves confidence.
+7. Tests and verification — run repository-defined unit, integration, E2E, lint, build, migration, or service checks that materially apply.
+8. Code review — independently review correctness, security, maintainability, performance, compatibility, and test adequacy. Classify findings as BLOCKER, IMPORTANT, SUGGESTION, or repository-defined equivalent.
+9. GitHub publication — publish exact verified changes.
+10. Pull request — summarize design, behavior, tests, risks, quality gates actually performed, and follow-ups. Do not claim checks that did not run.
 
-A blocker finding prevents the team from presenting the change as ready for merge.
+A BLOCKER finding prevents the team from presenting the change as ready for merge.
 
 ## Security Team protocol
 
 1. Establish scope, assets, trust boundaries, data sensitivity, and authorization for active testing.
-2. Threat-model before recommending controls when architecture is involved.
+2. Threat-model before recommending controls when architecture is involved; use `multi-lens-review` where architecture, operations, and maintainability tradeoffs matter.
 3. Prioritize exploitability and business impact over checklist volume.
 4. For findings, provide evidence, affected component, severity/rationale, remediation, and verification method.
 5. Prefer secure-by-default designs, least privilege, deny-by-default, strong authentication/authorization, secrets hygiene, and defense in depth.
 6. Never recommend disabling a security control as the final fix when root-cause remediation is feasible.
 7. Keep authorized testing bounded to the stated target and purpose.
+8. Use `fact-check` for material claims about CVEs, standards, platform behavior, support status, or externally defined controls.
 
 ## Incident Analysis Team protocol
 
 1. Preserve evidence before disruptive changes when practical.
 2. Build a short timeline: what changed, when symptoms began, what still works, and what fails.
-3. Isolate the failing layer: network → OS/runtime → service/process → application → dependency → database/storage → external integration.
-4. Maintain explicit hypotheses with supporting evidence, contradicting evidence, and the next discriminating test.
-5. Prefer read-only diagnostics before restarts, kills, deletes, package changes, firewall changes, or data modification.
-6. Distinguish symptom relief, workaround, root-cause fix, and preventive action.
-7. After recovery, verify service health and regression conditions, then state root cause only when evidence supports it.
+3. If repository or branch state is stale or uncertain, use Quality Engineering `project-catchup` before changing code.
+4. Isolate the failing layer: network → OS/runtime → service/process → application → dependency → database/storage → external integration.
+5. Maintain explicit hypotheses with supporting evidence, contradicting evidence, and the next discriminating test.
+6. Prefer read-only diagnostics before restarts, kills, deletes, package changes, firewall changes, or data modification.
+7. Distinguish symptom relief, workaround, root-cause fix, and preventive action.
+8. After recovery, verify service health and regression conditions, then state root cause only when evidence supports it. Use `fact-check` when the conclusion depends on external product/platform facts.
 
 ## Cross-team handoffs
 
@@ -87,7 +92,7 @@ A blocker finding prevents the team from presenting the change as ready for merg
 - Incident → Security when compromise, malicious activity, suspicious authentication, secret exposure, or exploit evidence appears.
 - Security → Incident when containment, forensic preservation, or production recovery is required.
 
-At a handoff, preserve observed facts, exact repository state, checks already run, evidence locations, ruled-out hypotheses, constraints, open risks, and the next team's objective. Do not reset the investigation merely because the team changes.
+At a handoff, preserve observed facts, exact repository state, checks already run, quality findings, evidence locations, ruled-out hypotheses, constraints, open risks, and the next team's objective. Do not reset the investigation merely because the team changes.
 
 ## Ambiguity rule
 
@@ -97,6 +102,6 @@ At a handoff, preserve observed facts, exact repository state, checks already ru
 
 ## Completion gate
 
-Before calling work complete, state the exact repository/branch/commit or PR state changed, team roles materially used, checks that actually ran, unresolved blockers or risks, and whether the work is merge-ready, review-ready, or diagnostic-only.
+Before calling work complete, state the exact repository/branch/commit or PR state changed, team roles materially used, Quality Engineering gates actually performed, checks that actually ran, unresolved blockers or risks, and whether the work is merge-ready, review-ready, or diagnostic-only.
 
-Read `references/routing.md` for the canonical Luna Router v1 decision contract and evaluation examples.
+Read `references/routing.md` for the canonical Luna Router v1 decision contract and evaluation examples. Quality-gate triggers and readiness semantics are canonical in `.agents/skills/luna-quality-engineering/references/quality-gates.md`.
