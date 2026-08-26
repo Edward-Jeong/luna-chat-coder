@@ -1,0 +1,18 @@
+{
+  "schemaVersion": "0.1",
+  "cases": [
+    {"input":"Review this PR for SQL injection and authorization bypass","expected":"code-audit"},
+    {"input":"Analyze this GraphQL API for BOLA and BFLA risks","expected":"api-security"},
+    {"input":"Generate and analyze a CycloneDX SBOM and review dependency vulnerabilities","expected":"supply-chain"},
+    {"input":"Assess prompt injection and tool abuse risks in this agent","expected":"llm-security"},
+    {"input":"Analyze this memory dump and preserve forensic evidence","expected":"digital-forensics"},
+    {"input":"Enrich these IOCs and summarize threat intelligence context","expected":"threat-intelligence"},
+    {"input":"Triage this supplied ransomware sample offline with YARA","expected":"malware-analysis"},
+    {"input":"Review this Kubernetes deployment for container and IAM security risks","expected":"cloud-security"},
+    {"input":"Assess Active Directory Kerberos and NTLM security configuration","expected":"windows-security"},
+    {"input":"Analyze this PCAP and document the custom protocol behavior","expected":"protocol-analysis"},
+    {"input":"Build a new vulnerability management web portal","expected":"handoff:coding"},
+    {"input":"Spring Boot service fails after database migration; analyze logs and recover service","expected":"handoff:incident-analysis"},
+    {"input":"Help with an unrelated general coding question","expected":"unmatched"}
+  ]
+}
