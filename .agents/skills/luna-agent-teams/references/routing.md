@@ -54,15 +54,18 @@ Typical signals:
 - design an API/data model/module architecture
 - write tests, fix a confirmed bug, prepare/review a general PR
 
+For material UI/frontend work, Coding remains the lead team and conditionally adds the Luna Design Specialist and an independent Design Reviewer. Read `.agents/skills/luna-design-system/SKILL.md`; use repository-root `DESIGN.md` as persistent design context, creating it from `templates/DESIGN.md` for new/material UI surfaces when missing.
+
 ### 4. Resolve mixed tasks by dominant outcome
 
 Use exactly one lead team unless the task has clearly separable phases.
 
 - Existing outage + likely code defect -> **Incident lead**, then Coding handoff after isolation.
 - New auth/security feature -> **Coding lead + Security support** from architecture through review.
+- New/material UI feature -> **Coding lead + Design Specialist**, then Design Reviewer before Code Reviewer readiness; add Security only when a security boundary materially changes.
 - Security finding requiring code remediation -> **Security lead** for finding/acceptance criteria, then Coding implementation, then Security verification.
 - Suspected breach causing outage -> **Incident lead + Security support**; prioritize evidence preservation and containment.
-- General PR review -> **Coding / Code Reviewer**; add Security only when the diff materially changes a security boundary.
+- General PR review -> **Coding / Code Reviewer**; add Security only when the diff materially changes a security boundary and Design only when UI/design-system behavior materially changes.
 
 ## Specialist selection
 
@@ -71,6 +74,8 @@ Use exactly one lead team unless the task has clearly separable phases.
 - **Implementation Engineer**: source/config changes.
 - **Test Engineer**: any behavior change requiring executable verification.
 - **Code Reviewer**: any merge/readiness decision; independent from implementation.
+- **Design Specialist**: conditional role for material UI/frontend/design-system work; creates/reads/refines `DESIGN.md` and turns design intent into implementation constraints.
+- **Design Reviewer**: independent post-implementation UI consistency/accessibility gate; blockers prevent merge readiness.
 
 ### Security
 - **Security Architect**: trust boundaries, security controls, auth models, sensitive-data flows.
@@ -84,6 +89,20 @@ Use exactly one lead team unless the task has clearly separable phases.
 - **Application Diagnostician**: runtime, stack traces, app configuration, dependency/request flow.
 - **Database Diagnostician**: DB connectivity, credentials, migrations, locks, storage/capacity, SQL behavior.
 - **Root Cause Analyst**: multi-layer causal synthesis and corrective/preventive actions.
+
+## UI design-system routing
+
+Treat work as material UI when it creates or substantially changes web/mobile screens, dashboards, forms, navigation, tables, data visualization, frontend information architecture, component libraries, design tokens/themes, responsive behavior, accessibility behavior, or reusable visual rules.
+
+For that route:
+
+1. Read `.agents/skills/luna-design-system/SKILL.md`.
+2. Read repository-root `DESIGN.md` before UI architecture/implementation decisions.
+3. If `DESIGN.md` is missing for a new/material UI surface, instantiate it from `templates/DESIGN.md` when available, replace placeholders, and refine generic defaults from known project evidence.
+4. Use the Design Specialist before implementation and the independent Design Reviewer after implementation.
+5. Keep UI implementation in the repository's existing framework/theme/component system; DESIGN.md is persistent context, not a parallel UI framework.
+
+Do not add Design for backend-only/API-only/CLI-only/infrastructure work, unrelated incidents, copy-only edits, or tiny isolated visual fixes where creating a design system would be disproportionate. If an existing `DESIGN.md` exists, even a small UI change should avoid contradicting it.
 
 ## Confidence and ambiguity
 
@@ -103,7 +122,7 @@ Do not ask the user to choose a Luna team. Routing is Luna's responsibility.
 - Active penetration testing requires an authorized target/scope. Without it, stay in review/threat-model/remediation mode.
 - During incidents, prefer evidence-preserving and read-only diagnostics before restart, kill, delete, package/config, firewall, or data changes.
 - A request for a workaround does not erase the obligation to distinguish workaround from root cause.
-- Security review and Code Review must remain independent enough to block readiness when evidence warrants it.
+- Security review, Design Review, and Code Review must remain independent enough to block readiness when evidence warrants it.
 
 ## Handoff state
 
@@ -120,13 +139,14 @@ Open risks/blockers
 Next team objective
 ```
 
-Do not force the next team to rediscover known facts.
+For UI handoffs also carry the current `DESIGN.md` state and any unresolved Design Reviewer findings. Do not force the next team to rediscover known facts.
 
 ## Evaluation examples
 
 | Request | Lead | Support / specialists | Why |
 | --- | --- | --- | --- |
-| "새 취약점 관리 웹 서비스를 만들어줘" | Coding | Architect, Implementation, Test, Code Reviewer + Security Architect | creation is dominant; security boundary is material |
+| "새 취약점 관리 웹 서비스를 만들어줘" | Coding | Architect, Implementation, Design Specialist, Test, Design Reviewer, Code Reviewer + Security Architect | creation is dominant; UI and security boundaries are material |
+| "관리자 대시보드 만들어줘" | Coding | Design Specialist + Implementation + Test + Design Reviewer + Code Reviewer | material UI work requires persistent DESIGN.md context and design gate |
 | "이 PR에 SQL injection이 있는지 봐줘" | Security | AppSec, Security Reviewer | security assurance is the outcome |
 | "RHEL agent -> manager는 되는데 역방향 통신이 안 돼" | Incident | Infrastructure Diagnostician | existing connectivity failure |
 | "Spring bean 생성 오류가 DB migration 후 발생해" | Incident | Application + Database Diagnostician | existing multi-layer runtime failure |
@@ -141,7 +161,9 @@ Do not force the next team to rediscover known facts.
 
 - Do not invoke all teams for every task.
 - Do not select Security merely because the word "security" appears in a product name.
+- Do not select Design merely because a repository contains frontend code when the requested task is unrelated to UI behavior.
 - Do not select Coding first for an unexplained live failure.
 - Do not select Incident for a planned migration merely because migrations can fail.
 - Do not ask users which agent/team they want when intent is already inferable.
 - Do not hide a cross-team handoff when it changes safety, scope, or readiness.
+- Do not let the starter DESIGN.md override established project evidence or brand guidance.
