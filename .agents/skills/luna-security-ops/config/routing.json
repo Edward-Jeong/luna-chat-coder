@@ -1,0 +1,80 @@
+{
+  "schemaVersion": "0.1",
+  "meta": {
+    "description": "Single source of truth for Luna Security Ops domain routing.",
+    "fallback": "unmatched",
+    "decisionPolicy": "semantic_intent_then_dominant_risk_then_keyword_hints"
+  },
+  "routes": [
+    {
+      "id": "SEC01",
+      "label": "Code Audit",
+      "capability": "code-audit",
+      "intents": ["source security review", "SAST", "secure code review", "PR security review"],
+      "keywords": ["semgrep", "codeql", "sast", "source review", "code audit", "sql injection", "auth bypass"]
+    },
+    {
+      "id": "SEC02",
+      "label": "API Security",
+      "capability": "api-security",
+      "intents": ["API security assessment", "authorization testing", "API abuse analysis"],
+      "keywords": ["api security", "graphql", "bola", "bfla", "idor", "oauth", "jwt"]
+    },
+    {
+      "id": "SEC03",
+      "label": "Supply Chain",
+      "capability": "supply-chain",
+      "intents": ["SBOM analysis", "SCA", "dependency risk", "build provenance", "CI/CD security"],
+      "keywords": ["sbom", "sca", "black duck", "cyclonedx", "spdx", "trivy", "syft", "dependency"]
+    },
+    {
+      "id": "SEC04",
+      "label": "LLM Security",
+      "capability": "llm-security",
+      "intents": ["LLM threat assessment", "agent security", "prompt injection analysis", "tool abuse analysis"],
+      "keywords": ["llm security", "prompt injection", "agent security", "jailbreak", "memory poisoning", "mcp security"]
+    },
+    {
+      "id": "SEC05",
+      "label": "Digital Forensics",
+      "capability": "digital-forensics",
+      "intents": ["forensic analysis", "evidence preservation", "memory or disk artifact analysis"],
+      "keywords": ["forensics", "memory dump", "volatility", "timeline", "disk image", "artifact"]
+    },
+    {
+      "id": "SEC06",
+      "label": "Threat Intelligence",
+      "capability": "threat-intelligence",
+      "intents": ["IOC enrichment", "threat intelligence", "campaign analysis", "OSINT security research"],
+      "keywords": ["ioc", "cti", "threat intelligence", "osint", "campaign", "indicator"]
+    },
+    {
+      "id": "SEC07",
+      "label": "Malware Analysis",
+      "capability": "malware-analysis",
+      "intents": ["malware triage", "offline malicious sample analysis", "YARA-oriented sample analysis"],
+      "keywords": ["malware", "ransomware", "yara", "trojan", "backdoor", "sample analysis"]
+    },
+    {
+      "id": "SEC08",
+      "label": "Cloud Security",
+      "capability": "cloud-security",
+      "intents": ["container security", "Kubernetes security", "cloud configuration security"],
+      "keywords": ["kubernetes", "k8s", "container", "docker security", "cloud security", "iam"]
+    },
+    {
+      "id": "SEC09",
+      "label": "Windows Security",
+      "capability": "windows-security",
+      "intents": ["Windows security assessment", "Active Directory security", "Windows hardening review"],
+      "keywords": ["active directory", "windows security", "kerberos", "ntlm", "ad cs", "bloodhound"]
+    },
+    {
+      "id": "SEC10",
+      "label": "Protocol Analysis",
+      "capability": "protocol-analysis",
+      "intents": ["packet analysis", "custom protocol analysis", "protocol reverse engineering"],
+      "keywords": ["pcap", "wireshark", "protocol", "packet", "grpc", "protobuf"]
+    }
+  ]
+}
