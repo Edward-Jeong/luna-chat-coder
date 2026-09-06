@@ -1,10 +1,12 @@
 # Luna Chat Coder entry point
 
+For material repository engineering work, read `docs/CORE_ENGINEERING_PROTOCOL_V2.md` as the shared execution policy. It defines Luna's default follow-through, bounded requirement grilling, codebase-aware design, risk-calibrated TDD, evidence-first debugging, dual-axis review, delegation, verification, and approval behavior. Apply it without duplicating the same mandatory rules across project files.
+
 When repository development is requested from a chat surface with a disposable or sandboxed code-execution environment, read `.agents/skills/luna-chat-coder/SKILL.md` before working on the repository task.
 
 For development, security review/testing, or production troubleshooting/incident analysis, also read `.agents/skills/luna-agent-teams/SKILL.md`. Apply Luna Router automatically: infer the lead team and minimum specialists from the user's natural-language intent, current system state, dominant risk, and requested outcome. Do not ask the user to select a team when the route is inferable.
 
-For material repository work, also apply `.agents/skills/luna-quality-engineering/SKILL.md`. The Quality Engineering Layer selects the minimum useful quality gates for the task: requirement validation, multi-lens review, self-review, fresh-eyes review, SSOT audit, clean rebuild evaluation, factual verification, and project catch-up. Do not run every gate mechanically.
+For material repository work, also apply `.agents/skills/luna-quality-engineering/SKILL.md`. The Quality Engineering Layer selects the minimum useful quality gates for the task: requirement validation, multi-lens review, self-review, fresh-eyes review, SSOT audit, clean rebuild evaluation, factual verification, and project catch-up. Do not run every gate mechanically. `docs/CORE_ENGINEERING_PROTOCOL_V2.md` defines when requirement grilling, TDD, evidence-first debugging, and dual-axis review should alter the engineering loop.
 
 For work that materially creates or changes a user interface, frontend layout, visual component system, dashboard, form workflow, styling system, accessibility behavior, or data presentation, also read `.agents/skills/luna-design-system/SKILL.md`. Treat repository-root `DESIGN.md` as persistent design source of truth. For a new or material UI surface, create `DESIGN.md` from `templates/DESIGN.md` when it is missing, refine it from known project evidence, read it before implementation, and apply the Design Reviewer gate before claiming merge readiness.
 
@@ -18,4 +20,4 @@ The repository itself defines its runtimes, services, dependencies, architecture
 
 Treat exact GitHub commit and PR state as durable source truth, preserve unrelated work, and do not make access to the user's computer a dependency of the workflow.
 
-When this repository is used as a template, keep this entry point and add the project's own engineering instructions alongside it. If the generated project includes a UI surface, instantiate repository-root `DESIGN.md` from `templates/DESIGN.md` during initial project setup. Public discoverable web surfaces should inherit the Search Visibility gate through this entry point rather than copying a separate SEO checklist into each generated repository.
+When this repository is used as a template, keep this entry point and `docs/CORE_ENGINEERING_PROTOCOL_V2.md`, then add the project's own engineering instructions alongside them. If the generated project includes a UI surface, instantiate repository-root `DESIGN.md` from `templates/DESIGN.md` during initial project setup. Public discoverable web surfaces should inherit the Search Visibility gate through this entry point rather than copying a separate SEO checklist into each generated repository.
