@@ -1,6 +1,6 @@
 # Luna Quality Gates
 
-This document is the canonical trigger and completion contract for the Luna Quality Engineering Layer.
+This document is the canonical trigger and completion contract for the Luna Quality Engineering Layer. The detailed operating rules for requirement grilling, test-first vertical slicing, evidence-first debugging, dual-axis review, and deep-module design are canonical in `engineering-disciplines.md`.
 
 ## 1. requirement-check
 
@@ -14,7 +14,9 @@ Check:
 - destructive/irreversible actions;
 - assumptions that could change architecture or scope.
 
-Proceed without asking when ambiguity is low and a safe interpretation is available. Ask only when a missing fact would materially alter scope, authorization, safety, or architecture.
+If unresolved choices can materially change architecture, scope, security, data contracts, operations, or acceptance criteria, escalate from a simple check to **requirement grilling**. Resolve facts Luna can inspect before asking the user. Ask the user for decisions that cannot be safely inferred, work through prerequisite decisions before dependent ones, and do not begin implementation while a critical branch remains silently assumed.
+
+Proceed without asking when ambiguity is low and a safe interpretation is available. Requirement grilling ends when no unresolved branch can materially change the implementation.
 
 ## 2. multi-lens-review
 
@@ -25,6 +27,8 @@ Use independent lenses as applicable:
 - security and trust boundaries;
 - operations/reliability and failure modes;
 - maintainability/testability/upgrade path.
+
+When module boundaries or interfaces are changing, also apply **deep-module design**: prefer a small stable interface hiding cohesive behavior, keep volatile integrations behind adapters, reduce shotgun changes and leaky boundaries, and reject speculative abstraction without a current requirement.
 
 Do not collapse conflicting findings into consensus. State the conflict, evidence, tradeoff, and decision owner.
 
@@ -41,6 +45,8 @@ Review:
 - tests added/updated and what they prove;
 - docs/config/schema/API drift;
 - unrelated changes.
+
+For suitable new behavior or bug fixes, verify that the implementation used or preserved an appropriate behavioral test seam and that tests do not merely mirror implementation details.
 
 ## 4. fresh-eyes-review
 
@@ -103,6 +109,49 @@ Reconstruct from durable evidence in this order when available:
 
 Do not use remembered session context to override newer durable repository evidence.
 
+## Engineering discipline gates
+
+These are cross-cutting disciplines rather than additional checklist quotas.
+
+### Test-first vertical slicing
+
+Trigger for new behavior or a bug fix when an automated behavioral seam is practical.
+
+Completion criteria:
+- the critical public/observable seam is identified;
+- at least the material behavioral slices are driven by a red-capable test before their implementation;
+- each cycle changes one coherent vertical slice rather than bulk-writing speculative tests;
+- expected values come from the requirement, known-good behavior, or another source independent of the implementation;
+- a valid failing test is not weakened merely to make the code pass.
+
+When no practical seam exists, disclose why and use the strongest faithful verification loop available.
+
+### Evidence-first debugging
+
+Trigger for bugs, regressions, outages, flaky behavior, and performance problems.
+
+Completion criteria before a root-cause claim:
+- a feedback loop or other discriminating evidence targets the exact symptom;
+- the failure is reproduced and minimised as far as practical;
+- multiple falsifiable hypotheses are considered when the cause is not already proven;
+- instrumentation/tests discriminate between hypotheses rather than merely add logs;
+- the fix is verified against both the minimal reproduction and the original scenario;
+- a regression test is added at the correct seam when practical;
+- temporary instrumentation is removed.
+
+If these conditions cannot be met, remain `diagnostic-only` and label the causal conclusion as unresolved or provisional.
+
+### Dual-axis review
+
+Trigger for material diffs before merge-ready status.
+
+Run and report two independent axes:
+
+1. **Spec** — requirement/acceptance fidelity, omissions, scope creep, unauthorized contract changes.
+2. **Engineering** — correctness, architecture, security, reliability, maintainability, performance where material, compatibility, test adequacy, and structural smells.
+
+Do not let one axis mask the other. If no reliable requirement source exists, report the Spec axis as unavailable rather than fabricating one.
+
 ## Severity and readiness
 
 - BLOCKER: must resolve before merge-ready.
@@ -110,10 +159,10 @@ Do not use remembered session context to override newer durable repository evide
 - SUGGESTION: optional improvement.
 
 Final readiness states:
-- `merge-ready` — required checks passed and no unresolved blocker;
+- `merge-ready` — required checks passed, applicable review axes were performed or explicitly unavailable, and no unresolved blocker;
 - `review-ready` — implementation is coherent but human/CI/external verification remains;
 - `diagnostic-only` — analysis or evidence collection only; no delivery claim.
 
 ## Anti-ceremony rule
 
-Quality gates are risk controls, not a checklist quota. Skip a gate when it cannot materially improve confidence, and document unavailable material verification rather than fabricating it.
+Quality gates and engineering disciplines are risk controls, not a checklist quota. Skip a control when it cannot materially improve confidence, and document unavailable material verification rather than fabricating it.
