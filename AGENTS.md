@@ -20,4 +20,6 @@ The repository itself defines its runtimes, services, dependencies, architecture
 
 Treat exact GitHub commit and PR state as durable source truth, preserve unrelated work, and do not make access to the user's computer a dependency of the workflow.
 
+For an explicit Luna health audit or `$doctor` request, use `.agents/skills/doctor/SKILL.md` on demand. Do not load it during unrelated engineering work.
+
 When this repository is used as a template, keep this entry point and `docs/CORE_ENGINEERING_PROTOCOL_V2.md`, then add the project's own engineering instructions alongside them. If the generated project includes a UI surface, instantiate repository-root `DESIGN.md` from `templates/DESIGN.md` during initial project setup. Public discoverable web surfaces should inherit the Search Visibility gate through this entry point rather than copying a separate SEO checklist into each generated repository.
