@@ -61,6 +61,12 @@ Analyze this SAST High finding and implement a verified remediation.
 
 사용자가 Coding, Security, Incident Analysis 중 하나를 직접 고를 필요는 없습니다. Repository-local Luna Router policy가 lead team과 필요한 specialist를 선택합니다.
 
+## Luna Doctor
+
+저장소의 지침과 스킬 구성을 점검하려면 Codex에서 `$doctor`를 요청합니다. `$doctor --deep`은 중복 문단과 경로 참조까지 확인하고, `$doctor --fix`는 근거가 있는 작은 변경의 diff를 준비해 검증합니다. 실제 파일 삭제나 플러그인/MCP 제거를 자동 실행하지 않습니다.
+
+직접 읽기 전용 진단을 실행하려면 `python3 .agents/skills/doctor/scripts/health.py --root . --deep`을 사용합니다. 최초 진단의 기준값과 조치 분류는 [`docs/LUNA_HEALTH_CHECK_2026-09-23.md`](../../docs/LUNA_HEALTH_CHECK_2026-09-23.md)에 있습니다. 저장소에 설정 파일이 없으면 사용자 환경의 플러그인 설치 상태나 MCP 연결 상태는 **미확인**으로 표시합니다.
+
 ## Optional custom-agent integration
 
 `integrations/codex/agents/*.toml`은 named custom agent/subagent 기능을 사용할 수 있는 Codex 환경을 위한 **선택적 통합**입니다. Luna의 핵심 동작은 이 기능에 의존하지 않습니다.
