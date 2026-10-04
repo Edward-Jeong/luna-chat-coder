@@ -48,7 +48,7 @@ The Design Specialist participates before implementation when UI decisions are m
 
 ## Design Reviewer gate
 
-After material UI implementation and before the Coding Team declares the change review-ready, independently review:
+After material UI implementation, require independent Design Review before merge-ready. Apply the canonical Core readiness contract from the active instruction chain. If independent Design Review is unavailable, complete authorized implementation and verification, then hand off as review-ready with the missing review identified. Never claim an unavailable review. Review:
 
 - consistency with `DESIGN.md` intent and tokens;
 - responsive layout behavior appropriate to supported viewports;

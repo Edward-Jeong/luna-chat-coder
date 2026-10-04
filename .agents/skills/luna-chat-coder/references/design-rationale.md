@@ -460,3 +460,11 @@ When Luna itself changes:
 - keep versioning deliberate; pre-publication work may remain at `0.1.0` until the first public release is intentionally cut.
 
 The aim is a small runtime protocol with enough durable design memory that future maintainers can simplify or extend it without rediscovering the same failures from scratch.
+
+## 25. Shared policy ownership and rollout (2026-10-04)
+
+Core Engineering Protocol owns shared execution, review independence, verification, and readiness. Team and Quality entry points link to it rather than copying the full engineering loop. Routing references own team selection; quality references own gate triggers and severity.
+
+A missing required check cannot be turned into merge readiness by disclosure. Two review axes describe what is assessed, while independent review describes who/which execution assessed it. Same-session role switching remains self-review; unavailable independent review yields a review-ready handoff without interrupting authorized implementation.
+
+Template edits do not retrofit repositories or alter a user's Codex home. Existing projects receive a versioned policy copy plus a bounded managed pointer in their active root instruction file. Preserve project instructions and stricter security/check requirements. Local/global updates are explicit, previewable, backed up, and conflict checked; never run mutable remote policy on every task.

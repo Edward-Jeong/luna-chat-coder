@@ -109,10 +109,7 @@ Do not use remembered session context to override newer durable repository evide
 - IMPORTANT: should resolve before merge unless explicitly accepted with rationale.
 - SUGGESTION: optional improvement.
 
-Final readiness states:
-- `merge-ready` — required checks passed and no unresolved blocker;
-- `review-ready` — implementation is coherent but human/CI/external verification remains;
-- `diagnostic-only` — analysis or evidence collection only; no delivery claim.
+Readiness and review-independence are canonical in `docs/CORE_ENGINEERING_PROTOCOL_V2.md` §§8, 12–13. Required checks must pass; disclosing an unavailable check does not satisfy it. Independent Code Review is required for material implementation. If either is outstanding, use `review-ready`, not `merge-ready`. Report analysis-only work as `diagnostic-only`.
 
 ## Anti-ceremony rule
 
