@@ -1,25 +1,16 @@
 # Luna Chat Coder entry point
 
-For material repository engineering work, read `docs/CORE_ENGINEERING_PROTOCOL_V2.md` as the shared execution policy. It defines Luna's default follow-through, bounded requirement grilling, codebase-aware design, risk-calibrated TDD, evidence-first debugging, dual-axis review, delegation, verification, and approval behavior. Apply it without duplicating the same mandatory rules across project files.
+For material engineering work, read `docs/CORE_ENGINEERING_PROTOCOL_V2.md`. It is the canonical shared execution, review-independence, verification, approval, and readiness contract. Keep project-specific instructions alongside this entry point; preserve their technology choices, security boundaries, and stricter checks.
 
-When repository development is requested from a chat surface with a disposable or sandboxed code-execution environment, read `.agents/skills/luna-chat-coder/SKILL.md` before working on the repository task.
+Load only the policy relevant to the task:
 
-For development, security review/testing, or production troubleshooting/incident analysis, also read `.agents/skills/luna-agent-teams/SKILL.md`. Apply Luna Router automatically: infer the lead team and minimum specialists from the user's natural-language intent, current system state, dominant risk, and requested outcome. Do not ask the user to select a team when the route is inferable.
+- Repository development from a disposable chat sandbox: `.agents/skills/luna-chat-coder/SKILL.md` for exact source, execution, publication, and recovery.
+- Development, security assurance, or incident diagnosis: `.agents/skills/luna-agent-teams/SKILL.md` for one lead team and minimum useful specialists. Infer the route without asking the user to select a team.
+- Material implementation or quality review: `.agents/skills/luna-quality-engineering/SKILL.md` for risk-appropriate quality gates.
+- Material UI/frontend work: `.agents/skills/luna-design-system/SKILL.md`. Read root `DESIGN.md`; create it from `templates/DESIGN.md` for a new/material surface when missing. Refine defaults from project evidence and apply Design Review.
+- Public web content intended for search discovery: `.agents/skills/luna-search-visibility/SKILL.md`. Exclude private/admin/internal/closed-network and backend/CLI-only surfaces; classify mixed routes separately. Never weaken private boundaries for discoverability.
+- Explicit Luna health audit or `$doctor`: `.agents/skills/doctor/SKILL.md` on demand.
 
-For material repository work, also apply `.agents/skills/luna-quality-engineering/SKILL.md`. The Quality Engineering Layer selects the minimum useful quality gates for the task: requirement validation, multi-lens review, self-review, fresh-eyes review, SSOT audit, clean rebuild evaluation, factual verification, and project catch-up. Do not run every gate mechanically. `docs/CORE_ENGINEERING_PROTOCOL_V2.md` defines when requirement grilling, TDD, evidence-first debugging, and dual-axis review should alter the engineering loop.
+Reading a policy does not require every specialist or GitHub Actions. Use exact GitHub state, preserve unrelated work, and use the sandbox when sufficient. Each project defines its runtime, architecture, dependencies, and checks.
 
-For work that materially creates or changes a user interface, frontend layout, visual component system, dashboard, form workflow, styling system, accessibility behavior, or data presentation, also read `.agents/skills/luna-design-system/SKILL.md`. Treat repository-root `DESIGN.md` as persistent design source of truth. For a new or material UI surface, create `DESIGN.md` from `templates/DESIGN.md` when it is missing, refine it from known project evidence, read it before implementation, and apply the Design Reviewer gate before claiming merge readiness.
-
-For public web surfaces intended to be discoverable through search or AI-assisted search, also read `.agents/skills/luna-search-visibility/SKILL.md` and apply its Search Visibility quality gate before merge readiness. This gate is conditional: it applies to public marketing/product sites, SaaS landing pages, public documentation, blogs, knowledge pages, catalogs, and similar discoverable pages. It must not be mechanically applied to internal/admin/private/closed-network surfaces, backend-only services, CLI tools, or infrastructure repositories. In mixed applications, classify public versus private routes and apply optimization only to the intended public surface.
-
-Search Visibility must never weaken security boundaries. If robots/crawler/WAF/CDN changes could expose private, privileged, debug, staging, API-documentation, log, backup, or internal content, add Security Team support and treat accidental exposure as a merge blocker. Engine-specific claims must be verified against current first-party vendor documentation, and Luna must never guarantee rankings, AI citation, inclusion, or traffic outcomes.
-
-Loading these skills is a readiness step, not a reason to use GitHub Actions or every specialist. Normal engineering work should stay in the chat sandbox work container when it is available and sufficient. UI and Search Visibility routing must remain conditional; do not burden unrelated backend-only, CLI-only, infrastructure, private/internal, or incident work with these steps.
-
-The repository itself defines its runtimes, services, dependencies, architecture, build system, verification requirements, and established UI implementation conventions. Luna Chat Coder supplies continuity and missing execution capability; Luna Agent Teams supplies automatic routing and role separation; Luna Quality Engineering supplies evidence-driven quality gates; Luna Design System supplies persistent visual intent and UI review; Luna Search Visibility supplies public-web discoverability and exposure-safety checks. None should substitute technologies merely because they are easier to run.
-
-Treat exact GitHub commit and PR state as durable source truth, preserve unrelated work, and do not make access to the user's computer a dependency of the workflow.
-
-For an explicit Luna health audit or `$doctor` request, use `.agents/skills/doctor/SKILL.md` on demand. Do not load it during unrelated engineering work.
-
-When this repository is used as a template, keep this entry point and `docs/CORE_ENGINEERING_PROTOCOL_V2.md`, then add the project's own engineering instructions alongside them. If the generated project includes a UI surface, instantiate repository-root `DESIGN.md` from `templates/DESIGN.md` during initial project setup. Public discoverable web surfaces should inherit the Search Visibility gate through this entry point rather than copying a separate SEO checklist into each generated repository.
+For template-generated UI projects, instantiate root `DESIGN.md` during setup. Existing projects do not inherit template edits automatically: use `scripts/apply-luna-policy.py` and `docs/POLICY_UPDATES.ko.md` for a reviewed update that preserves project instructions. Do not fetch or execute mutable remote policy on every task.
