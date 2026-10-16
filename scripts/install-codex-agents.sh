@@ -37,7 +37,7 @@ for file in "${files[@]}"; do
     preserved=$((preserved + 1))
     continue
   fi
-  # Exclusive creation also protects a file created after the existence check.
+  # Refuse to truncate a regular file created after the existence check.
   if (set -o noclobber; cat "$file" > "$target"); then
     installed=$((installed + 1))
   elif [[ -e "$target" || -L "$target" ]]; then
