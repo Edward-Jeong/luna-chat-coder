@@ -4,7 +4,7 @@ description: Route development, security assurance, or incident diagnosis to one
 license: MIT
 compatibility: Designed for Agent Skills hosts and Codex custom agents.
 metadata:
-  version: "0.6.0"
+  version: "0.6.1"
 ---
 
 # Luna Agent Teams
@@ -35,7 +35,7 @@ Load Design System for material UI work and preserve root `DESIGN.md` as visual 
 
 Load Search Visibility only for public discoverable web content. Preserve no-index/private boundaries in mixed apps. Add Security support for authentication/authorization, secrets, untrusted inputs, sensitive data, privileged actions, supply-chain trust, or crawler/public exposure changes. Accidental private exposure is blocking.
 
-Use Quality Engineering only for materially useful gates. Current first-party sources must support external platform/security claims; never guarantee rankings, citations, inclusion, or traffic.
+Use Quality Engineering only for materially useful gates. For behavioral test seams, discriminating diagnosis, and module-interface techniques, consult `.agents/skills/luna-quality-engineering/references/engineering-disciplines.md` when applicable. Current first-party sources must support external platform/security claims; never guarantee rankings, citations, inclusion, or traffic.
 
 ## Handoffs and reporting
 

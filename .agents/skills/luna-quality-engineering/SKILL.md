@@ -4,7 +4,7 @@ description: Select evidence-driven quality gates for material implementation, c
 license: MIT
 compatibility: Designed for Agent Skills hosts and Codex custom agents.
 metadata:
-  version: "0.3.0"
+  version: "0.3.1"
 ---
 
 # Luna Quality Engineering Layer
@@ -25,6 +25,8 @@ Route first, then select the minimum useful gates:
 
 For narrow low-impact edits, use targeted verification. Do not run every gate, manufacture mirror tests, introduce a new test stack, or block on stylistic preferences. Core defines bounded grilling, risk-calibrated TDD, evidence-first debugging, and the two review axes; do not duplicate their procedures here.
 
+Consult `references/engineering-disciplines.md` for behavioral test seams, discriminating diagnosis, and module-interface techniques when the Core triggers apply. This supporting reference does not add a parallel workflow.
+
 ## Review evidence
 
 Keep behavioral correctness and codebase fit conclusions separate. Include evidence, affected scope, consequence, and practical remediation for BLOCKER or IMPORTANT findings. Do not invent findings when no material issue is found.
@@ -35,4 +37,4 @@ Never claim a check that did not run. Required verification that fails, cannot r
 
 ## Attribution
 
-Quality patterns were informed by MIT-licensed Paperthin and adapted for Luna. See `references/provenance.md`.
+Quality patterns were informed by MIT-licensed Paperthin; selected supporting techniques also draw on ideas reviewed from MIT-licensed `mattpocock/skills`. Both were adapted for Luna. See `references/provenance.md`.
