@@ -1,59 +1,53 @@
 ---
 name: luna-quality-engineering
-description: Apply Luna's evidence-driven quality gates and engineering disciplines after routing and during engineering work. Provides requirement validation, disciplined test-first implementation, evidence-first debugging, dual-axis review, deep-module design, self-review, fresh-eyes review, SSOT audit, clean rebuild decisions, fact checking, and project catch-up.
+description: Apply Luna's evidence-driven quality gates after routing and during engineering work. Provides requirement validation, multi-lens review, self-review, fresh-eyes review, SSOT audit, clean rebuild decisions, fact checking, project catch-up, and Protocol v2 review/test calibration.
 license: MIT
 compatibility: Designed for Agent Skills hosts and Codex custom agents.
 metadata:
-  version: "0.2.0"
+  version: "0.2.1"
 ---
 
 # Luna Quality Engineering Layer
 
-This skill is Luna Chat Coder's quality-control layer. It is inspired by low-level agentic engineering patterns from Paperthin and selected engineering principles reviewed from Matt Pocock's MIT-licensed `mattpocock/skills`, but it is implemented as a Luna-native workflow and does not require either upstream project to be installed.
+This skill is Luna Chat Coder's quality-control layer. It is inspired by low-level agentic engineering patterns from Paperthin, but is implemented as a Luna-native workflow and does not require Paperthin to be installed.
 
 It complements, rather than replaces:
 
+- `docs/CORE_ENGINEERING_PROTOCOL_V2.md` for Luna's shared engineering execution policy;
 - `.agents/skills/luna-chat-coder/SKILL.md` for exact-state, continuity, execution, publication, and evidence policy;
 - `.agents/skills/luna-agent-teams/SKILL.md` for lead-team routing and specialist ownership.
 
 ## Core rule
 
-Route first, then apply only the minimum quality gates and engineering disciplines that materially reduce risk. Quality controls must not become ceremony, duplicate existing repository checks, or block work for stylistic reasons.
+Route first, then apply only the minimum quality gates that materially reduce risk. Quality checks must not become ceremony, duplicate existing repository checks, or block work for stylistic reasons.
 
-## Five engineering disciplines
+Use Protocol v2 to calibrate four behaviors that often become over-applied:
 
-Luna strengthens its existing workflow with five embedded disciplines:
-
-1. **requirement grilling** — resolve material decision branches before architecture or implementation instead of silently guessing;
-2. **test-first vertical slicing** — prefer behavioral red -> green feedback at stable public seams, one coherent slice at a time;
-3. **evidence-first debugging** — reproduce and discriminate before hypothesising or changing source;
-4. **dual-axis review** — review specification fidelity and engineering quality independently;
-5. **deep-module design** — continuously challenge module/interface depth, coupling, locality, vocabulary, and test seams when architecture is consequential.
-
-These are Luna-native rules, not imported slash commands. Read `references/engineering-disciplines.md` for the canonical operating contract.
+- **bounded grilling**: ask only unresolved questions whose answers can materially change scope, architecture, authorization, destructive impact, or acceptance criteria; infer routine details from context and repository evidence;
+- **risk-calibrated TDD**: prefer test-first work for regression bugs, deterministic business rules, security/data boundaries, migrations/parsers/protocols, or repositories that already require TDD; do not add low-value mirror tests for trivial reversible edits;
+- **evidence-first debugging**: establish reproduction and evidence before changing suspicious-looking code or retrying failed operations;
+- **dual-axis review**: review behavioral correctness separately from codebase fit so a change cannot hide architecture debt behind passing tests or hide behavioral defects behind clean structure.
 
 ## Eight quality patterns
 
-1. **requirement-check** — verify that intent, constraints, non-goals, acceptance criteria, and unresolved ambiguity are understood before architecture or implementation; invoke requirement grilling when material decision branches remain.
-2. **multi-lens-review** — review consequential decisions from independent architecture, security, operations/reliability, and maintainability lenses; apply deep-module design where module boundaries or interfaces are involved; surface disagreement instead of averaging it away.
-3. **self-review** — immediately review a completed change for correctness, security, regressions, test adequacy, documentation drift, and accidental scope expansion.
+1. **requirement-check** — verify that intent, constraints, non-goals, acceptance criteria, and unresolved material ambiguity are understood before architecture or implementation. This is not permission to block on preferences that can be inferred or safely assumed.
+2. **multi-lens-review** — review consequential decisions from independent architecture, security, operations/reliability, and maintainability lenses; surface disagreement instead of averaging it away.
+3. **self-review** — immediately review a completed change for correctness, security, regressions, test adequacy, documentation drift, accidental scope expansion, and codebase fit.
 4. **fresh-eyes-review** — perform a context-minimized review of the artifact or diff so hidden assumptions and author-context bias are exposed.
 5. **ssot-audit** — detect duplicated facts, policies, constants, decisions, status claims, or configuration guidance and identify one canonical source.
 6. **clean-rebuild** — when patches and compatibility workarounds have accumulated beyond safe local repair, prefer a bounded clean reconstruction from current requirements while preserving verified behavior.
 7. **fact-check** — externally verify reality-grounded claims that can materially affect design, security, compatibility, operations, or user decisions; distinguish verified facts from assumptions.
 8. **project-catchup** — reconstruct current project state from durable evidence such as branch, commit, PR, issues, docs, tests, and recent changes before resuming stale or interrupted work.
 
-Read `references/quality-gates.md` for trigger rules, severity, and completion criteria.
+Read `references/quality-gates.md` for trigger rules, severity, and completion criteria. Consult `references/engineering-disciplines.md` when applicable work needs behavioral test seams, discriminating diagnosis, or module-interface techniques. Protocol v2 remains the shared policy authority; the reference supplies supporting techniques rather than another mandatory workflow.
 
 ## Default placement in Luna workflow
 
 For material development:
 
-`Requirements -> requirement-check/grilling when needed -> Architecture/deep-module check -> Repository/Branch -> test seam -> test-first vertical implementation -> self-review -> Tests/Verification -> dual-axis review -> GitHub -> PR`
+`Requirements -> bounded requirement-check -> Architecture -> codebase impact review -> multi-lens-review when consequential -> Repository/Branch -> Implementation -> risk-calibrated tests/TDD -> self-review -> targeted fresh-eyes/ssot/fact-check/clean-rebuild checks -> dual-axis independent review -> repository-required verification -> GitHub -> PR`
 
-Add `multi-lens-review`, `fresh-eyes-review`, `ssot-audit`, `clean-rebuild`, and `fact-check` only when their risk triggers apply.
-
-For incident work, do not run architecture-oriented gates before evidence preservation and diagnosis. Use the evidence-first debugging discipline: build a feedback loop, reproduce, minimise, rank falsifiable hypotheses, instrument, fix, regression-test, and only then state root cause. Apply other quality gates to remediation and final claims where relevant.
+For incident work, do not run architecture-oriented gates before evidence preservation and diagnosis. Apply evidence-first debugging, then quality gates to hypotheses, fixes, remediation, and final root-cause claims only where relevant.
 
 For security work, Security Team ownership remains authoritative for risk acceptance and finding severity; this layer improves review quality but does not override authorization or scope boundaries.
 
@@ -61,23 +55,38 @@ For security work, Security Team ownership remains authoritative for risk accept
 
 Use the minimum applicable set:
 
-- Always for material implementation: `requirement-check`, `self-review`.
-- Material requirement ambiguity that can change architecture/scope/security/acceptance: add requirement grilling.
-- New behavior or bug fix with a practical automated seam: use test-first vertical slicing.
-- Existing failure, regression, flaky behavior, or performance problem: use evidence-first debugging before causal claims or speculative source changes.
-- Material diff before readiness: use dual-axis review; keep specification fidelity separate from engineering quality.
-- Architecture, auth, privileged, data, deployment, or reliability boundary changes: add `multi-lens-review` and deep-module design where boundaries/interfaces are changing.
+- Always for material implementation: `requirement-check`, `self-review`, and dual-axis Code Review before merge-ready status.
+- Architecture, auth, privileged, data, deployment, or reliability boundary changes: add `multi-lens-review`.
 - Large/refactored/generated output or long-session work: add `fresh-eyes-review`.
 - Repeated facts/config/docs across files: add `ssot-audit`.
 - Repeated workaround/patch stacking or architecture drift: evaluate `clean-rebuild`.
 - Claims about versions, APIs, CVEs, standards, compatibility, product behavior, or external reality: add `fact-check` when material.
 - Resuming an old branch/project or unclear repository state: start with `project-catchup`.
+- Reproducible bugs: prefer a failing regression test before the fix when the repository can express one meaningfully.
+- Narrow low-impact reversible edits: use targeted verification and do not manufacture tests solely to satisfy process.
+
+## Testing calibration
+
+Start with the narrowest meaningful check that can falsify the change. Broaden only when repository requirements, changed boundaries, risk, previous failures, or unresolved concerns justify it.
+
+Once the required and risk-appropriate checks pass, do not repeat broad suites without new changes, failure evidence, flaky behavior, or an unresolved material concern.
+
+Tests must verify behavior, contracts, boundaries, or regressions. A test that simply restates implementation structure without protecting a meaningful contract is not automatically valuable.
+
+## Dual-axis review contract
+
+For material code changes, independent Code Review must record conclusions on both axes:
+
+- **Behavioral correctness** — requested behavior, edge cases, security properties, failure/recovery behavior, compatibility, test adequacy, data integrity.
+- **Codebase fit** — architecture/module boundaries, maintainability, SSOT/duplication, dependency/abstraction cost, operational impact, documentation/configuration consistency, scope control.
+
+A BLOCKER or IMPORTANT issue on either axis remains visible on that axis. Do not collapse both into a single generic pass/fail judgment that hides the nature of the risk.
 
 ## Findings
 
 Classify findings as:
 
-- **BLOCKER** — correctness, security, data integrity, authorization, unrecoverable migration, materially false evidence, or unmet critical requirement issue. Prevents merge-ready status.
+- **BLOCKER** — correctness, security, data integrity, authorization, unrecoverable migration, or materially false evidence issue. Prevents merge-ready status.
 - **IMPORTANT** — meaningful maintainability, reliability, test, compatibility, documentation, or architecture risk that should normally be resolved before merge.
 - **SUGGESTION** — beneficial improvement that does not invalidate readiness.
 
@@ -87,13 +96,8 @@ Do not create blocker findings for taste, naming preference, or speculative futu
 
 A quality pass must report only checks actually performed. For each blocking or important finding, include evidence, affected scope, consequence, and the next corrective action. If no material issue is found, say so without inventing findings.
 
-For material code changes, readiness reporting should identify both review axes when dual-axis review applies:
-
-- **Spec** — pass / findings / unavailable because no reliable requirement source exists;
-- **Engineering** — pass / findings / unavailable because required evidence could not be inspected.
-
-A change is merge-ready only when repository-required verification has passed or any unavailable checks are explicitly disclosed, and no unresolved BLOCKER remains on either axis.
+A change is merge-ready only when repository-required verification has passed or any unavailable checks are explicitly disclosed, both review axes have no unresolved BLOCKER, and no specialist gate that materially applies has an unresolved BLOCKER.
 
 ## Attribution
 
-The conceptual inspiration for several quality patterns comes from the MIT-licensed `LilMGenius/paperthin` project. The five engineering disciplines are Luna-native adaptations informed by selected ideas reviewed from the MIT-licensed `mattpocock/skills` project. Luna names, trigger rules, severity model, routing integration, and workflow implementation are project-specific. See `references/provenance.md`.
+The conceptual inspiration for several patterns comes from the MIT-licensed `LilMGenius/paperthin` project; selected techniques also draw on ideas reviewed from the MIT-licensed `mattpocock/skills` project. Luna names, trigger rules, severity model, routing integration, and workflow implementation are project-specific. See `references/provenance.md`.

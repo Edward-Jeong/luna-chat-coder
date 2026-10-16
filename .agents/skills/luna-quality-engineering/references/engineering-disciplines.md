@@ -1,132 +1,42 @@
-# Luna Engineering Disciplines
+# Luna Engineering Discipline Techniques
 
-This document defines five Luna-native engineering disciplines used to reduce common AI coding failure modes. They are not a copy of an external skill pack and are not user-facing slash commands. Luna applies them through its existing Router, Agent Teams, and Quality Engineering layers when the task warrants them.
+Use these techniques under `docs/CORE_ENGINEERING_PROTOCOL_V2.md`, the canonical shared execution policy. This reference adds implementation detail; it does not introduce another mandatory workflow, broader TDD triggers, or alternate review axes. Apply only the techniques that materially improve confidence.
 
-The five disciplines are:
+## Bounded requirement grilling
 
-1. requirement grilling;
-2. test-first vertical slicing;
-3. evidence-first debugging;
-4. dual-axis review;
-5. deep-module design.
+Use Protocol v2 section 4 to decide whether a question is necessary. For material unresolved choices, map prerequisite decisions before dependent ones, separate observed facts from user decisions, and define observable acceptance criteria. Stop when remaining uncertainty is routine and reversible; record a conservative assumption and proceed.
 
-The governing principle is simple: **do not let implementation speed outrun understanding, feedback, diagnosis, or design quality.**
+## Behavioral test seams and vertical slices
 
-## 1. Requirement grilling
+Use Protocol v2 section 6 to decide when test-first work is justified. The existence of a test seam alone does not justify tests for trivial reversible changes.
 
-Use when a material requirement contains unresolved choices that can change architecture, scope, security, data contracts, operational behavior, or acceptance criteria.
+When test-first work applies:
 
-Do not ask questions merely to create ceremony. First resolve facts Luna can inspect from the repository, environment, documentation, or authoritative sources. Ask the user only for decisions, preferences, business rules, authorization, or missing context that cannot be safely inferred.
+- choose a stable observable seam: public API, service boundary, CLI contract, UI flow, or event contract;
+- drive one coherent behavioral slice through red, minimal implementation, and green before adding the next slice;
+- confirm that the test fails for the intended reason;
+- derive expected values from requirements or known-good behavior independently of the implementation;
+- avoid speculative test batches and coupling to private internals;
+- do not weaken a valid test merely to make new code pass.
 
-Treat requirements as a decision tree:
+If a meaningful automated seam is unavailable or disproportionate, disclose the limitation and use the strongest faithful verification loop available. This is a feedback technique, not a coverage quota.
 
-- resolve prerequisite decisions before dependent ones;
-- expose hidden assumptions explicitly;
-- distinguish facts from decisions;
-- record constraints and non-goals;
-- define observable acceptance criteria;
-- stop grilling when no unresolved branch can materially change the implementation.
+## Discriminating diagnosis
 
-When a safe, low-risk interpretation is obvious, proceed without interrogation. When uncertainty is material, implementation must not begin while critical branches remain silently assumed.
+Use Protocol v2 section 7 for the governing debugging sequence. A useful feedback loop must detect the user's actual symptom, rather than a nearby error.
 
-## 2. Test-first vertical slicing
+Prefer deterministic, fast reproductions. For flaky failures, improve reproduction reliability when practical before drawing causal conclusions. Track supporting and contradicting evidence for each hypothesis, then instrument or vary one discriminating factor at a time. Do not claim a root cause until evidence distinguishes it from alternatives.
 
-For new behavior and bug fixes where automated testing is practical, prefer a red -> green loop at a stable public seam.
+When a fix is made, verify both the minimized reproduction and original scenario when practical, add a meaningful regression check where justified, and remove temporary instrumentation. If reproduction or discriminating evidence remains unavailable, label the causal conclusion unresolved or provisional.
 
-Before writing a test, identify the observable seam that represents the required behavior: public API, service boundary, CLI contract, UI flow, event contract, or another externally meaningful interface. Do not test private implementation details merely because they are easy to reach.
+## Dual-axis review techniques
 
-Rules:
+Use the axes defined by Protocol v2 section 8: **Behavioral correctness** and **Codebase fit**. Keep findings, severity, and evidence distinct by axis; one passing axis must not hide a failing one.
 
-- define critical test seams before implementation;
-- write one failing behavioral test for one vertical slice;
-- confirm the test can fail for the intended reason;
-- implement only enough behavior to make that slice pass;
-- repeat with the next slice;
-- keep expected results independent from the implementation under test;
-- avoid bulk-writing speculative tests for behavior not yet understood;
-- do not weaken or rewrite a valid test merely to make new code pass.
+For acceptance fidelity, use reliable requirements and observable contracts. If that source is missing, disclose the limitation rather than inventing requirements; still inspect behavior, edge cases, security, compatibility, and failure handling. For codebase fit, compare the change with established ownership and design patterns instead of generic style preferences.
 
-TDD is a feedback discipline, not a coverage quota. If the repository lacks an appropriate test seam or the cost is disproportionate, document the limitation and use the strongest faithful verification loop available.
+## Deep-module techniques
 
-## 3. Evidence-first debugging
+Use Protocol v2 section 5 when consequential boundaries or interfaces change. Prefer a small stable interface hiding cohesive behavior and isolate volatile external integrations behind adapters.
 
-For bugs, regressions, outages, flaky behavior, and performance problems, diagnosis must begin with a feedback loop rather than a favorite hypothesis.
-
-Preferred sequence:
-
-1. preserve relevant evidence;
-2. build a repeatable red-capable signal for the exact symptom;
-3. reproduce and minimise the failure;
-4. generate multiple falsifiable hypotheses;
-5. rank hypotheses using available evidence;
-6. instrument or change one discriminating variable at a time;
-7. identify root cause only when evidence distinguishes it from alternatives;
-8. create a regression test at the correct seam when practical;
-9. apply the minimal fix;
-10. re-run both the minimal reproduction and the original scenario;
-11. remove temporary instrumentation and record the verified cause.
-
-A valid feedback loop must catch the user's actual symptom, not merely detect a nearby error. Prefer deterministic, fast, agent-runnable loops. For flaky bugs, raise the reproduction rate before theorising.
-
-If no meaningful reproduction or discriminating evidence can be obtained, state that limitation explicitly. Do not present an untested hypothesis as root cause.
-
-## 4. Dual-axis review
-
-Review material changes along two independent axes so a strong result on one axis cannot hide failure on the other.
-
-### Axis A: specification fidelity
-
-Check whether the change:
-
-- implements each required behavior and acceptance criterion;
-- respects constraints and non-goals;
-- omits required cases;
-- introduces unrequested scope or behavior;
-- changes contracts without approval.
-
-### Axis B: engineering quality
-
-Check whether the change is structurally sound and repository-appropriate, including:
-
-- correctness and failure handling;
-- architecture and module boundaries;
-- security and trust boundaries;
-- maintainability and readability;
-- performance and resource behavior where material;
-- compatibility and upgrade/migration impact;
-- test quality and observability;
-- unnecessary duplication, speculative abstraction, shotgun changes, leaky boundaries, or confusing domain vocabulary.
-
-Report findings under the two axes separately. A change can pass specification fidelity while failing engineering quality, or the reverse. Do not merge the axes into one vague "looks good" judgement.
-
-Repository-defined standards override generic style preferences. Quality findings must be evidence-based and severity-classified using Luna's BLOCKER / IMPORTANT / SUGGESTION model.
-
-## 5. Deep-module design
-
-AI-assisted implementation can create code faster than humans can notice architectural entropy. Luna therefore treats design quality as a continuous constraint, not a one-time architecture document.
-
-Prefer modules that expose a small, stable interface while hiding substantial cohesive behavior. Place boundaries where they improve change isolation, testability, ownership, and reasoning.
-
-Before or during consequential implementation, challenge:
-
-- whether the chosen module owns the behavior it depends on;
-- whether callers must know too much about internals;
-- whether the same domain concept is represented inconsistently;
-- whether one logical change requires edits across too many unrelated files;
-- whether abstractions exist for hypothetical future needs instead of current requirements;
-- whether adapters isolate external systems and volatility;
-- whether tests can verify behavior through meaningful seams.
-
-Do not refactor for aesthetic purity. Deepen or reshape a module only when the change reduces real complexity, coupling, duplication, or future change cost without obscuring the current requirement.
-
-## How Luna applies the disciplines
-
-These disciplines strengthen existing Luna layers rather than creating a parallel workflow:
-
-- `requirement-check` invokes requirement grilling only when unresolved decisions are material;
-- Coding Team uses test-first vertical slicing for suitable features and bug fixes;
-- Incident Analysis Team uses evidence-first debugging before source-change handoff;
-- Code Review uses dual-axis review for material diffs;
-- Architecture and `multi-lens-review` use deep-module design when module boundaries or interfaces are consequential.
-
-The anti-ceremony rule remains authoritative: apply the smallest discipline that materially improves confidence. The goal is disciplined engineering, not more prompts or more documents.
+Inspect whether callers depend on private details, domain concepts have inconsistent representations, or a single logical change causes unrelated edits across many modules. Reshape a boundary only when doing so reduces real coupling, duplication, or change cost. Avoid abstraction for hypothetical future needs and unrelated aesthetic refactoring.

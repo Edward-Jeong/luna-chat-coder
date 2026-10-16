@@ -1,6 +1,6 @@
 # Luna Quality Gates
 
-This document is the canonical trigger and completion contract for the Luna Quality Engineering Layer. The detailed operating rules for requirement grilling, test-first vertical slicing, evidence-first debugging, dual-axis review, and deep-module design are canonical in `engineering-disciplines.md`.
+This document is the canonical trigger and completion contract for the Luna Quality Engineering Layer. The shared execution policy, TDD triggers, and review-axis definitions are canonical in `docs/CORE_ENGINEERING_PROTOCOL_V2.md`. Consult `engineering-disciplines.md` for supporting techniques when those triggers apply.
 
 ## 1. requirement-check
 
@@ -115,7 +115,7 @@ These are cross-cutting disciplines rather than additional checklist quotas.
 
 ### Test-first vertical slicing
 
-Trigger for new behavior or a bug fix when an automated behavioral seam is practical.
+Trigger when Protocol v2 section 6 justifies test-first work and an automated behavioral seam is practical. A practical seam alone does not require TDD for trivial reversible changes.
 
 Completion criteria:
 - the critical public/observable seam is identified;
@@ -130,16 +130,15 @@ When no practical seam exists, disclose why and use the strongest faithful verif
 
 Trigger for bugs, regressions, outages, flaky behavior, and performance problems.
 
-Completion criteria before a root-cause claim:
+Evidence required for a root-cause claim:
 - a feedback loop or other discriminating evidence targets the exact symptom;
 - the failure is reproduced and minimised as far as practical;
 - multiple falsifiable hypotheses are considered when the cause is not already proven;
 - instrumentation/tests discriminate between hypotheses rather than merely add logs;
-- the fix is verified against both the minimal reproduction and the original scenario;
-- a regression test is added at the correct seam when practical;
-- temporary instrumentation is removed.
 
-If these conditions cannot be met, remain `diagnostic-only` and label the causal conclusion as unresolved or provisional.
+When remediation is requested, also verify the fix against both the minimal reproduction and the original scenario where practical, add a meaningful regression test where justified, and remove temporary instrumentation. A diagnostic-only investigation does not require a source change or regression test to establish a cause.
+
+If causal evidence is insufficient, label the conclusion unresolved or provisional. Select readiness from the actual delivery and verification state; successful diagnosis alone does not imply a fix is merge-ready.
 
 ### Dual-axis review
 
@@ -147,10 +146,9 @@ Trigger for material diffs before merge-ready status.
 
 Run and report two independent axes:
 
-1. **Spec** — requirement/acceptance fidelity, omissions, scope creep, unauthorized contract changes.
-2. **Engineering** — correctness, architecture, security, reliability, maintainability, performance where material, compatibility, test adequacy, and structural smells.
+Use **Behavioral correctness** and **Codebase fit** as defined in Protocol v2 section 8. Keep evidence and severity distinct by axis rather than maintaining a second definition here.
 
-Do not let one axis mask the other. If no reliable requirement source exists, report the Spec axis as unavailable rather than fabricating one.
+Do not let one axis mask the other. If no reliable requirement source exists, disclose the acceptance-fidelity limitation and still inspect observable behavior; do not fabricate requirements or waive the rest of behavioral review.
 
 ## Severity and readiness
 
@@ -159,7 +157,7 @@ Do not let one axis mask the other. If no reliable requirement source exists, re
 - SUGGESTION: optional improvement.
 
 Final readiness states:
-- `merge-ready` — required checks passed, applicable review axes were performed or explicitly unavailable, and no unresolved blocker;
+- `merge-ready` — required checks passed, both review axes were performed for material changes with limitations disclosed, and no unresolved blocker;
 - `review-ready` — implementation is coherent but human/CI/external verification remains;
 - `diagnostic-only` — analysis or evidence collection only; no delivery claim.
 
