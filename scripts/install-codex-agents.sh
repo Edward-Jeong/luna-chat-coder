@@ -28,5 +28,24 @@ done
 
 echo "Validated ${#files[@]} Codex agents"
 mkdir -p "$DEST"
-cp "${files[@]}" "$DEST"/
-echo "Installed Luna Codex agents to $DEST"
+installed=0
+preserved=0
+for file in "${files[@]}"; do
+  target="$DEST/$(basename "$file")"
+  if [[ -e "$target" || -L "$target" ]]; then
+    echo "Preserved existing: $target"
+    preserved=$((preserved + 1))
+    continue
+  fi
+  # Exclusive creation also protects a file created after the existence check.
+  if (set -o noclobber; cat "$file" > "$target"); then
+    installed=$((installed + 1))
+  elif [[ -e "$target" || -L "$target" ]]; then
+    echo "Installation failed or target appeared during installation: $target" >&2
+    exit 1
+  else
+    echo "Could not install: $target" >&2
+    exit 1
+  fi
+done
+echo "Installed $installed; preserved $preserved existing Luna Codex agents in $DEST"
