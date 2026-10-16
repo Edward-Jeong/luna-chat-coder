@@ -4,7 +4,7 @@ description: Apply Luna's evidence-driven quality gates after routing and during
 license: MIT
 compatibility: Designed for Agent Skills hosts and Codex custom agents.
 metadata:
-  version: "0.2.0"
+  version: "0.2.1"
 ---
 
 # Luna Quality Engineering Layer
@@ -39,7 +39,7 @@ Use Protocol v2 to calibrate four behaviors that often become over-applied:
 7. **fact-check** — externally verify reality-grounded claims that can materially affect design, security, compatibility, operations, or user decisions; distinguish verified facts from assumptions.
 8. **project-catchup** — reconstruct current project state from durable evidence such as branch, commit, PR, issues, docs, tests, and recent changes before resuming stale or interrupted work.
 
-Read `references/quality-gates.md` for trigger rules, severity, and completion criteria.
+Read `references/quality-gates.md` for trigger rules, severity, and completion criteria. Consult `references/engineering-disciplines.md` when applicable work needs behavioral test seams, discriminating diagnosis, or module-interface techniques. Protocol v2 remains the shared policy authority; the reference supplies supporting techniques rather than another mandatory workflow.
 
 ## Default placement in Luna workflow
 
@@ -100,4 +100,4 @@ A change is merge-ready only when repository-required verification has passed or
 
 ## Attribution
 
-The conceptual inspiration for several patterns comes from the MIT-licensed `LilMGenius/paperthin` project. Luna names, trigger rules, severity model, routing integration, and workflow implementation are project-specific. See `references/provenance.md`.
+The conceptual inspiration for several patterns comes from the MIT-licensed `LilMGenius/paperthin` project; selected techniques also draw on ideas reviewed from the MIT-licensed `mattpocock/skills` project. Luna names, trigger rules, severity model, routing integration, and workflow implementation are project-specific. See `references/provenance.md`.

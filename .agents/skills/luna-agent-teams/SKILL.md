@@ -4,7 +4,7 @@ description: Automatically route repository work through Luna's Coding, Security
 license: MIT
 compatibility: Designed for Agent Skills hosts and Codex custom agents.
 metadata:
-  version: "0.5.0"
+  version: "0.5.1"
 ---
 
 # Luna Agent Teams
@@ -122,4 +122,4 @@ At a handoff, preserve observed facts, exact repository state, checks already ru
 
 Before calling work complete, state the exact repository/branch/commit or PR state changed, team roles materially used, Quality Engineering gates actually performed, both Code Review axes for material implementation, checks that actually ran, unresolved blockers or risks, and whether the work is merge-ready, review-ready, or diagnostic-only. For material UI work also state whether `DESIGN.md` existed, was created, or was updated, and whether Design Review found any blocker.
 
-Read `references/routing.md` for the canonical Luna Router decision contract and evaluation examples. Quality-gate triggers and readiness semantics are canonical in `.agents/skills/luna-quality-engineering/references/quality-gates.md`.
+Read `references/routing.md` for the canonical Luna Router decision contract and evaluation examples. For applicable implementation or incident work, consult `.agents/skills/luna-quality-engineering/references/engineering-disciplines.md` for behavioral test seams, discriminating diagnosis, and module-interface techniques under Protocol v2. Quality-gate triggers and readiness semantics are canonical in `.agents/skills/luna-quality-engineering/references/quality-gates.md`.
