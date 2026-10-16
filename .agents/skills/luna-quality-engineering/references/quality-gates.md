@@ -1,6 +1,6 @@
 # Luna Quality Gates
 
-This document is the canonical trigger and completion contract for the Luna Quality Engineering Layer. The shared execution policy, TDD triggers, and review-axis definitions are canonical in `docs/CORE_ENGINEERING_PROTOCOL_V2.md`. Consult `engineering-disciplines.md` for supporting techniques when those triggers apply.
+This document is the canonical trigger and completion contract for the Luna Quality Engineering Layer. The shared execution policy, TDD triggers, review-axis definitions, and readiness are canonical in the Core policy referenced by the active instruction chain (template default: `docs/CORE_ENGINEERING_PROTOCOL_V2.md`). Consult `engineering-disciplines.md` for supporting techniques when those triggers apply.
 
 ## 1. requirement-check
 
@@ -156,11 +156,8 @@ Do not let one axis mask the other. If no reliable requirement source exists, di
 - IMPORTANT: should resolve before merge unless explicitly accepted with rationale.
 - SUGGESTION: optional improvement.
 
-Final readiness states:
-- `merge-ready` — required checks passed, both review axes were performed for material changes with limitations disclosed, and no unresolved blocker;
-- `review-ready` — implementation is coherent but human/CI/external verification remains;
-- `diagnostic-only` — analysis or evidence collection only; no delivery claim.
+Readiness and review-independence are canonical in the active Core policy §§8, 12–13. Required checks must pass; disclosing an unavailable check does not satisfy it. Independent Code Review is required for material implementation. If either is outstanding, use `review-ready`, not `merge-ready`. Report analysis-only work as `diagnostic-only`.
 
 ## Anti-ceremony rule
 
-Quality gates and engineering disciplines are risk controls, not a checklist quota. Skip a control when it cannot materially improve confidence, and document unavailable material verification rather than fabricating it.
+Quality gates are risk controls, not a checklist quota. Skip a gate when it cannot materially improve confidence, and document unavailable material verification rather than fabricating it.

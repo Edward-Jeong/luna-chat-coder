@@ -1,5 +1,7 @@
 # Luna Core Engineering Protocol v2
 
+Policy revision: 2.1 (2026-10-04). This document owns shared execution, review independence, verification, and readiness policy. Specialist documents own routing and gate triggers; their summaries must not redefine this contract.
+
 Luna Core Engineering Protocol v2 is the shared engineering policy for Luna-enabled repositories and Codex usage. It consolidates Luna's existing exact-state, routing, quality, design, and security practices with five focused engineering disciplines: bounded grilling, risk-calibrated TDD, evidence-first debugging, dual-axis review, and codebase-aware design.
 
 The protocol is intentionally compact at runtime. Repository-specific instructions remain authoritative for technologies, build systems, test frameworks, deployment methods, and domain constraints.
@@ -139,7 +141,11 @@ Review whether the implementation belongs in the codebase cleanly:
 
 The same implementation can pass one axis and fail the other. Findings should remain distinct rather than being averaged into a generic "looks good" conclusion.
 
-For material work, independent Code Review should be fresh enough to challenge implementation assumptions. Add Design or Security review only when their boundaries are actually crossed.
+For material implementation, independent Code Review is required before `merge-ready`. Use a separate reviewer agent, separate review session, or human reviewer who reviews the final diff and acceptance criteria without relying on the implementer's narrative as proof. One independent reviewer may assess both axes; two axes do not require two agents.
+
+A role-name change inside the implementation session does not create an independent reviewer. The same agent may perform `self-review` or a context-minimized `fresh-eyes-review`, but must report it by that name rather than claim independent Code Review. If a separate reviewer is unavailable, continue authorized implementation and targeted verification, then hand off as `review-ready` with the missing independent review identified. Do not stop the implementation merely because delegation is unavailable.
+
+Add Design or Security review only when their boundaries are actually crossed. Preserve stricter repository-specific review requirements.
 
 ## 9. Autonomous follow-through and approvals
 
@@ -181,7 +187,7 @@ Testing must be proportional to the change and grounded in repository requiremen
 
 Run the smallest meaningful checks first, then broaden when warranted. Once required and risk-appropriate checks pass, do not repeat broad test suites without new changes, failures, flaky evidence, or unresolved risk.
 
-Never claim a check that did not run. If a required check cannot run, report the exact blocker and reduce readiness accordingly.
+Never claim a check that did not run. A required check that fails, cannot run, or is still pending prevents `merge-ready`; disclosing it does not count as passing it. Continue other independent authorized work and report the exact failure or blocker. Optional checks may be omitted with a proportionality rationale; do not relabel a required check as optional merely to finish.
 
 ## 13. Completion contract
 
@@ -195,6 +201,14 @@ Report:
 - review axes and specialist gates actually performed;
 - unresolved BLOCKER or IMPORTANT findings;
 - whether the result is merge-ready, review-ready, or diagnostic-only.
+
+Use these readiness states consistently across skills, agents, and reports:
+
+- `merge-ready`: all applicable repository-required verification passed, independent Code Review completed for material implementation, every materially applicable specialist review completed, and no unresolved BLOCKER remains. Resolve IMPORTANT findings or record explicit acceptance by an authorized decision owner with rationale; do not silently accept them.
+- `review-ready`: the implementation or proposed patch is coherent, but required verification, independent review, specialist review, or an acceptance decision remains. Identify what is missing. This state does not authorize merging.
+- `diagnostic-only`: analysis or evidence collection only; no implementation delivery claim.
+
+A failing required check is not waived by a successful unrelated check. Publishing a branch or opening a PR is not proof of merge readiness. The requested work can be ready for review without being ready for merge.
 
 Do not treat source edits alone as completion when the request included verification, GitHub publication, or PR creation.
 

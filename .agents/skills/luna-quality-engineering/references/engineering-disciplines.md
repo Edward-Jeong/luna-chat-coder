@@ -1,6 +1,6 @@
 # Luna Engineering Discipline Techniques
 
-Use these techniques under `docs/CORE_ENGINEERING_PROTOCOL_V2.md`, the canonical shared execution policy. This reference adds implementation detail; it does not introduce another mandatory workflow, broader TDD triggers, or alternate review axes. Apply only the techniques that materially improve confidence.
+Use these techniques under the canonical Core policy referenced by the active instruction chain (template default: `docs/CORE_ENGINEERING_PROTOCOL_V2.md`). This reference adds implementation detail; it does not introduce another mandatory workflow, broader TDD triggers, or alternate review axes. Apply only the techniques that materially improve confidence.
 
 ## Bounded requirement grilling
 
