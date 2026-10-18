@@ -87,7 +87,9 @@ Windows PowerShell:
 powershell -ExecutionPolicy Bypass -File .\scripts\install-codex-agents.ps1
 ```
 
-스크립트는 TOML 파일을 `$CODEX_HOME/agents/` 또는 기본 `~/.codex/agents/`에 복사합니다.
+스크립트는 TOML 파일을 `$CODEX_HOME/agents/` 또는 기본 `~/.codex/agents/`에 새로 설치합니다. 같은 이름의 파일이나 링크가 이미 있으면 내용이 같거나 달라도 보존하고, 설치·보존 개수를 출력합니다. 기존 정의의 갱신이 필요하면 diff를 검토한 뒤 별도로 병합하십시오. 강제 덮어쓰기 옵션은 제공하지 않습니다.
+
+이 변경은 향후 템플릿 사용과 명시적인 신규 설치에 적용합니다. 기존 프로젝트의 지침·정책·스킬을 일괄 갱신하거나 Codex 전역 정책을 자동 변경하지 않습니다. 기존 프로젝트에서는 현재 구성을 유지하고, 신규 프로젝트는 최신 템플릿에서 시작하십시오. 전역 named agent 변경은 다른 프로젝트에도 사용될 수 있으므로 기존 프로젝트와 분리된 설치가 필요하면 별도 `CODEX_HOME`을 지정하십시오.
 
 설치 후 해당 Codex build가 named custom agents를 지원한다면 다음 정의를 사용할 수 있습니다.
 
