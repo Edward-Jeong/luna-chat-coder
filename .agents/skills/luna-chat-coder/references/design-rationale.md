@@ -468,3 +468,7 @@ Core Engineering Protocol owns shared execution, review independence, verificati
 A missing required check cannot be turned into merge readiness by disclosure. Two review axes describe what is assessed, while independent review describes who/which execution assessed it. Same-session role switching remains self-review; unavailable independent review yields a review-ready handoff without interrupting authorized implementation.
 
 Template edits do not retrofit repositories or alter a user's Codex home. Existing projects receive a versioned policy copy plus a bounded managed pointer in their active root instruction file. Preserve project instructions and stricter security/check requirements. Local/global updates are explicit, previewable, backed up, and conflict checked; never run mutable remote policy on every task.
+
+## 26. Optional Security Ops and reverse providers (2026-10-20)
+
+Security Ops domain hints do not replace semantic team ownership. Scope declarations and artifact hashes provide admission/fixity checks, not a sandbox, permission grant, or proof of truth. Reverse-engineering providers are separate conditional capabilities; ordinary repository reviews and log investigations must not register or install REA. Keep external tools version-selected, raw customer output local, shared readiness in Core, and existing project/global configuration untouched. The earlier Security Ops draft is recovered selectively rather than merging its obsolete team policy wholesale.

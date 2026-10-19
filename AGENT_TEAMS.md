@@ -85,6 +85,8 @@ Use for threat modeling, security architecture, secure code review, SAST/DAST/SC
 
 The team is evidence- and remediation-oriented. Active testing must remain within the authorized scope.
 
+Optional domain helpers are documented in `docs/SECURITY_OPS.ko.md`. Security Ops preserves team ownership; REA is selected only for artifact reverse analysis, with no automatic client registration.
+
 ## Incident Analysis Team
 
 Use for service startup failures, connectivity problems, agent/manager communication issues, application stack traces, database failures, containers, OS/runtime problems, and multi-layer production defects.

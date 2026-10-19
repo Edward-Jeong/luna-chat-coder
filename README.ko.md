@@ -185,3 +185,7 @@ Luna Chat Coder가 다루는 범위는 다음과 같습니다.
 - temporary mission-owned remote state의 recovery-aware cleanup
 
 Protocol은 작게 유지합니다. constrained chat-based repository development에서 반복되는 실패를 실제로 예방하는 규칙만 추가합니다.
+
+## 선택형 보안·역공학 기능
+
+Security Ops는 업무 라우팅 제안, 범위 검사, 증거 무결성 검사, 설치 도구 탐색을 제공합니다. REA는 역공학 작업에서만 선택하는 정적 분석 연결이며 자동 설치·MCP 등록은 하지 않습니다. [사용법과 제약](docs/SECURITY_OPS.ko.md)을 참고하십시오. 기존 프로젝트와 설치된 Codex 설정에는 자동 반영되지 않습니다.
