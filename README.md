@@ -185,3 +185,7 @@ Luna Chat Coder covers:
 - recovery-aware cleanup of temporary mission-owned remote state.
 
 Keep the protocol small. Add rules only when they prevent a repeatable failure in constrained chat-based repository development.
+
+## Optional security and reverse analysis
+
+Security Ops adds advisory domain triage, scope and evidence checks, and read-only tool discovery. REA is a separate opt-in static artifact adapter; routine development and diagnosis do not load it. See [usage and limits](docs/SECURITY_OPS.ko.md). Existing projects and Codex installations are not migrated automatically.

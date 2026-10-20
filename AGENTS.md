@@ -9,6 +9,7 @@ Load only the policy relevant to the task:
 - Material implementation or quality review: `.agents/skills/luna-quality-engineering/SKILL.md` for risk-appropriate quality gates.
 - Material UI/frontend work: `.agents/skills/luna-design-system/SKILL.md`. Read root `DESIGN.md`; create it from `templates/DESIGN.md` for a new/material surface when missing. Refine defaults from project evidence and apply Design Review.
 - Public web content intended for search discovery: `.agents/skills/luna-search-visibility/SKILL.md`. Exclude private/admin/internal/closed-network and backend/CLI-only surfaces; classify mixed routes separately. Never weaken private boundaries for discoverability.
+- Concrete security domain assessment or evidence/tool handoff: `.agents/skills/luna-security-ops/SKILL.md`. For requested implementation-artifact reverse analysis only, load `.agents/skills/luna-reverse-engineering/SKILL.md`; REA remains optional and is never installed or registered automatically.
 - Explicit Luna health audit or `$doctor`: `.agents/skills/doctor/SKILL.md` on demand.
 
 Reading a policy does not require every specialist or GitHub Actions. Use exact GitHub state, preserve unrelated work, and use the sandbox when sufficient. Each project defines its runtime, architecture, dependencies, and checks.

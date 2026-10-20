@@ -1,0 +1,89 @@
+{
+  "schemaVersion": "0.1",
+  "cases": [
+    {
+      "input": "Review this PR for SQL injection and authorization bypass",
+      "expected": "code-audit"
+    },
+    {
+      "input": "Analyze this GraphQL API for BOLA and BFLA risks",
+      "expected": "api-security"
+    },
+    {
+      "input": "Generate and analyze a CycloneDX SBOM and review dependency vulnerabilities",
+      "expected": "supply-chain"
+    },
+    {
+      "input": "Assess prompt injection and tool abuse risks in this agent",
+      "expected": "llm-security"
+    },
+    {
+      "input": "Analyze this memory dump and preserve forensic evidence",
+      "expected": "digital-forensics"
+    },
+    {
+      "input": "Enrich these IOCs and summarize threat intelligence context",
+      "expected": "threat-intelligence"
+    },
+    {
+      "input": "Triage this supplied ransomware sample offline with YARA",
+      "expected": "malware-analysis"
+    },
+    {
+      "input": "Review this Kubernetes deployment for container and IAM security risks",
+      "expected": "cloud-security"
+    },
+    {
+      "input": "Assess Active Directory Kerberos and NTLM security configuration",
+      "expected": "windows-security"
+    },
+    {
+      "input": "Analyze this PCAP and document the custom protocol behavior",
+      "expected": "protocol-analysis"
+    },
+    {
+      "input": "Build a new vulnerability management web portal",
+      "expected": "handoff:coding"
+    },
+    {
+      "input": "Spring Boot service fails after database migration; analyze logs and recover service",
+      "expected": "handoff:incident-analysis"
+    },
+    {
+      "input": "Help with an unrelated general coding question",
+      "expected": "unmatched"
+    },
+    {
+      "input": "SecuMS 접속 테스트는 정상인데 Oracle 19c 점검 실패: Unhandled exception",
+      "expected": "handoff:incident-analysis"
+    },
+    {
+      "input": "고객 웹콘솔 API 권한 진단과 역할별 접근 검토",
+      "expected": "api-security"
+    },
+    {
+      "input": "블랙덕 결과에서 의존성 취약점과 공급망 위험을 검토",
+      "expected": "supply-chain"
+    },
+    {
+      "input": "포세라 JAR 내부 처리 흐름 역공학",
+      "expected": "reverse-engineering"
+    },
+    {
+      "input": "내부 Electron 모듈 구조를 분석",
+      "expected": "reverse-engineering"
+    },
+    {
+      "input": "에이전트 보안과 프롬프트 인젝션을 검토",
+      "expected": "llm-security"
+    },
+    {
+      "input": "새 보안 포털 만들어줘",
+      "expected": "handoff:coding"
+    },
+    {
+      "input": "로그만 읽고 왜 서비스 기동 실패인지 확인",
+      "expected": "handoff:incident-analysis"
+    }
+  ]
+}

@@ -1,2 +1,6 @@
 __pycache__/
 *.pyc
+
+# Private case artifacts and machine-local tool state
+work/
+security-tools.local.json

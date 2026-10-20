@@ -4,7 +4,7 @@ description: Route development, security assurance, or incident diagnosis to one
 license: MIT
 compatibility: Designed for Agent Skills hosts and Codex custom agents.
 metadata:
-  version: "0.6.1"
+  version: "0.6.2"
 ---
 
 # Luna Agent Teams
@@ -30,6 +30,8 @@ Execute the selected workflow yourself when delegation is unavailable. When reli
 - Incident: preserve evidence, build a timeline, isolate the failing layer, distinguish hypotheses with checks, recover safely, and separate workaround from supported root cause. Prefer read-only diagnostics before disruptive changes.
 
 ## Conditional support
+
+For concrete security-domain assessment, evidence validation, or tool discovery, load `.agents/skills/luna-security-ops/SKILL.md`. Its executable lexical triage is advisory; the semantic team decision stays authoritative. For requested reverse analysis of implementation artifacts, conditionally load `.agents/skills/luna-reverse-engineering/SKILL.md` under the existing lead team. Ordinary incident logs and repository reviews do not activate REA.
 
 Load Design System for material UI work and preserve root `DESIGN.md` as visual source of truth. Add a Design Specialist before implementation and Design Review afterward. Do not add design-system overhead for unrelated backend/CLI/infrastructure or tiny isolated UI edits.
 
