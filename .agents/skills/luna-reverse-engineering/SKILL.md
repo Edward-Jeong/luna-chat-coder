@@ -4,7 +4,7 @@ description: Inspect explicitly supplied local implementation artifacts, optiona
 license: MIT
 compatibility: Python 3.10+; optional REA installation and provider prerequisites are host-specific.
 metadata:
-  version: "0.1.0"
+  version: "0.1.1"
 ---
 
 # Luna Reverse Engineering
@@ -20,3 +20,5 @@ Activate only for requested binary/application implementation analysis or a conc
 The current adapter supports static JavaScript/Electron ASAR archives and native Ghidra inspection. Runtime launch, hooking, browser interaction, exploitation, automatic installation, and automatic MCP setup are outside this adapter. JAR/WAR analysis requires a separately selected Java archive/decompiler workflow; do not route it to .NET or claim REA Java support.
 
 REA is external MIT-licensed software (`morluto/rea`, npm `rea-agents`), not vendored code. Validate the installed release and actual provider capability; repository main documentation may describe unreleased functionality.
+
+For Codex, read `integrations/codex/README.md` for one-time setup and the optional `Luna Reverse Engineer` named specialist. Use `--node` with the packaged `.mjs` entry on Windows. Preserve any already-installed custom agents and do not assume installing a named agent copies repository-local helpers into another project.

@@ -98,6 +98,7 @@ powershell -ExecutionPolicy Bypass -File .\scripts\install-codex-agents.ps1
 - `Luna Code Reviewer`
 - `Luna Security Team`
 - `Luna Incident Analysis Team`
+- `Luna Reverse Engineer` (역공학 작업에서만 선택)
 
 ## Router execution model
 
@@ -137,3 +138,41 @@ Codex 제품 표면이 이러한 모델/API 제어를 직접 노출한다고 가
 ## Source and attribution
 
 The role taxonomy was informed by the MIT-licensed `Edward-Jeong/agency-agents` repository. Luna's definitions are condensed and adapted around Luna Chat Coder's exact-state, evidence, GitHub, and delivery policies rather than copied wholesale.
+
+## REA를 Codex에서 사용하는 방법
+
+Repository-local 진입점은 `.agents/skills/luna-reverse-engineering/SKILL.md`입니다. 최신 파일이 포함된 프로젝트를 Codex에서 열고 다음과 같이 요청하십시오.
+
+```text
+Luna 역공학 스킬을 사용해 제공한 ASAR의 모듈 구조와 API 호출 흐름을 정적으로 분석해줘.
+설치된 REA 버전과 샘플 해시를 확인하고 범위 파일을 만든 뒤 계획을 검토해 실행해.
+샘플 자체는 실행하지 말고, 관측 사실과 추론 및 미확인 사항을 구분해줘.
+```
+
+REA가 없을 때 설치는 별도 사용자 지시가 필요합니다. 다음 명령은 **사용자가 선택해 실행하는 1회 설치·검증 예시**이며, 매 작업의 자동 설정이 아닙니다. Node.js 24.19.0과 Python 3.11로 검증하는 구성이며, 정확한 REA 버전은 6.7.0입니다. 지원 Node 버전은 선택한 REA 배포의 요구사항도 확인하십시오. 사용자 PC 설치를 원격에서 완료했다고 간주하지 않습니다.
+
+Windows PowerShell (프로젝트 루트):
+
+```powershell
+npm install --prefix .\work\rea-runtime --ignore-scripts --no-audit --no-fund rea-agents@6.7.0
+$reaNode = (Get-Command node).Source
+$reaEntry = (Resolve-Path .\work\rea-runtime\node_modules\rea-agents\scripts\rea.mjs).Path
+python tests/run_security_ops_sample.py --node $reaNode --rea $reaEntry --version 6.7.0
+```
+
+macOS/Linux (프로젝트 루트):
+
+```bash
+npm install --prefix ./work/rea-runtime --ignore-scripts --no-audit --no-fund rea-agents@6.7.0
+REA_NODE="$(command -v node)"
+REA_ENTRY="$PWD/work/rea-runtime/node_modules/rea-agents/scripts/rea.mjs"
+python3 tests/run_security_ops_sample.py --node "$REA_NODE" --rea "$REA_ENTRY" --version 6.7.0
+```
+
+macOS의 위 명령은 사용 절차이며 실제 macOS 공급자 검증 결과를 의미하지 않습니다. 샘플 러너는 가상 ASAR만 검사하며 고객 파일은 사용하지 않습니다. 성공하려면 프로세스 종료코드뿐 아니라 `portal.js`의 파싱 완료가 확인되어야 합니다.
+
+실제 승인된 샘플에는 [범위 JSON과 분석 사용법](../../docs/SECURITY_OPS.ko.md)을 적용합니다. Windows에서는 `--node`에 절대 `node.exe` 경로, `--executable`에 절대 `scripts/rea.mjs` 경로를 지정하십시오. `rea.cmd`/`cmd.exe`/shell 실행을 사용하지 않습니다. 기본 호출은 계획만 출력하고 `--execute`가 있어야 실제 REA를 호출합니다.
+
+Named agent가 지원되는 Codex에서는 기존 설치 명령으로 `Luna Reverse Engineer`도 추가할 수 있습니다. 같은 이름의 기존 파일은 보존하므로 기존 사용자 정의를 갱신하려면 별도 diff 검토가 필요합니다. 전용 agent만 다른 프로젝트에 설치해도 해당 프로젝트의 스킬·실행 도구가 자동 복사되지는 않습니다. 기존 프로젝트에는 해당 스킬과 Security Ops helper를 먼저 검토해 포함하거나, 그 프로젝트의 승인된 도구를 사용하십시오.
+
+이 통합은 선택형 CLI 방식입니다. Codex MCP 등록·전역 설정을 변경하지 않으며, 에이전트 선택만으로 139개 이상의 REA 도구를 모든 작업에 상시 노출하지 않습니다. Ghidra/네이티브와 JAR/WAR 및 런타임 후킹 지원은 이번 ASAR 정적 분석 검증과 구분합니다.

@@ -132,6 +132,7 @@ Direct specialist/team entry points remain available:
 - `Luna Code Reviewer`
 - `Luna Security Team`
 - `Luna Incident Analysis Team`
+- `Luna Reverse Engineer` (optional artifact-analysis specialist)
 
 ## Routing examples
 

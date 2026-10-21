@@ -66,3 +66,16 @@ Doctor의 기존 겹침/대형 스킬 경고 및 `docs/luna/CORE_ENGINEERING_PRO
 - REA CLI·설치·보안 경계: https://github.com/morluto/rea
 
 reverse-skill의 동작 규칙 전체, GPLv3 CTF 모듈 및 외부 공격 도구 코드는 포함하지 않았습니다. REA 런타임도 저장소에 포함하지 않습니다.
+
+## 2026-10-21 재검증 및 Codex 연결
+
+PR #11 병합 main `523cc3eac5f825964e087e56c9a52eac3101afbf`에서 재개했습니다. 위 2026-10-20 실패 기록은 당시 환경의 관측 사실로 유지하며, 아래 재검증 결과와 구분합니다.
+
+- 동일 샌드박스에서는 REA process-ownership 오류가 다시 발생했습니다. 보안 검사나 격리 설정을 우회하지 않고 GitHub Actions의 실제 OS 러너로 검증을 옮겼습니다.
+- 최초 원격 실행: https://github.com/Edward-Jeong/luna-chat-coder/actions/runs/39518820185 (분석 대상 소스 `07df5094e83506db6662b9aa414d97675f77d828`). Ubuntu 24.04에서 REA 6.7.0 분석 성공과 `portal.js`의 `parse_status=complete`를 확인했습니다. 샘플을 실행하지 않았습니다.
+- 같은 실행의 Windows 2022는 기존 정책 업데이트 테스트가 Windows 경로 구분자를 그대로 비교해 실패했습니다. 실제 정책은 POSIX 형식 경로를 의도적으로 기록하므로 기대값을 `Path.as_posix()`로 수정했습니다. 정책 업데이트 런타임이나 검증 기준을 완화하지 않았습니다. Windows REA는 해당 실행에서 수행되지 않았습니다.
+- Windows/POSIX 공용으로 `--node ABSOLUTE_NODE --executable ABSOLUTE_REA_MJS`를 추가했습니다. shell 없이 인수 배열을 전달하고 `.cmd`/`.bat`를 거절합니다. 계획 호출에는 버전 조회를 포함한 프로세스 실행이 없습니다.
+- `Luna Reverse Engineer` 선택형 에이전트를 추가했습니다. 임시 Codex 홈에서 설치 도구가 새 정의를 설치하는 것과 TOML 7개 파싱을 확인했습니다. 사용자 PC에 설치했거나 실제 Codex 모델 세션에서 실행했다고 주장하지 않습니다.
+- Windows 최종 재검증과 독립 리뷰 결과는 후속 기록에 추가합니다. 네이티브/Ghidra·MCP 등록·JAR/WAR·macOS는 이번 검증 범위에 포함하지 않습니다.
+
+Codex 사용·1회 설치 명령은 `integrations/codex/README.md`의 REA 절을 참고하십시오. 동일 에이전트 파일의 사용자 수정은 기존 설치 도구의 보존 정책을 따릅니다.

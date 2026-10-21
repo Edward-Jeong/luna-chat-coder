@@ -37,7 +37,7 @@ class PolicyUpdateTests(unittest.TestCase):
         policy_updates.apply_plan(self.plan(True))
         self.assertEqual(regular.read_bytes(), b"base")
         self.assertTrue(override.read_bytes().startswith(b"temporary constraints"))
-        self.assertIn(str(self.root).encode(), override.read_bytes())
+        self.assertIn(self.root.as_posix().encode(), override.read_bytes())
 
     def test_rejects_edited_policy(self):
         policy_updates.apply_plan(self.plan())
