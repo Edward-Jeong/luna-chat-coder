@@ -1,0 +1,55 @@
+name: REA static acceptance
+
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/rea-validation.yml'
+      - 'scripts/security-ops.py'
+      - 'tests/**'
+      - 'integrations/codex/**'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  static-sample:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-24.04, windows-2022]
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        with:
+          node-version: '24.19.0'
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
+        with:
+          python-version: '3.11'
+      - name: Repository regression tests
+        run: python -m unittest discover -s tests -v
+      - name: Install selected external REA in disposable runner
+        run: npm install --prefix "${{ runner.temp }}/luna-rea" --ignore-scripts --no-audit --no-fund rea-agents@6.7.0
+      - name: Real ASAR static acceptance (no sample execution)
+        shell: python
+        env:
+          REA_TEST_ROOT: ${{ runner.temp }}/luna-rea
+        run: |
+          import json, os, pathlib, shutil, subprocess, sys
+          entry = pathlib.Path(os.environ['REA_TEST_ROOT']) / 'node_modules/rea-agents/scripts/rea.mjs'
+          command = [sys.executable, 'tests/run_security_ops_sample.py', '--node', shutil.which('node'),
+                     '--rea', str(entry.resolve()), '--version', '6.7.0']
+          run = subprocess.run(command, capture_output=True, text=True, encoding='utf-8')
+          print(run.stdout)
+          print(run.stderr, file=sys.stderr)
+          if run.returncode:
+              sys.exit(run.returncode)
+          report = json.loads(run.stdout)
+          assert report['rea']['status'] == 'succeeded'
+          assert report['rea']['sample_parse_complete'] is True
+          print('REA_ACCEPTANCE_OK', os.environ.get('RUNNER_OS'), '6.7.0', report['sample_sha256'])

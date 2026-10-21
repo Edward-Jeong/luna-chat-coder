@@ -160,7 +160,7 @@ def doctor():
             'mcp': 'not observed; CLI presence does not establish an MCP connection'}
 
 
-def rea(scope_path, target, kind, executable, version, execute=False):
+def rea(scope_path, target, kind, executable, version, execute=False, node=None):
     """Plan/run only two static CLI operations using an explicitly selected install."""
     scope = read_json(scope_path)
     object_value(scope, 'scope document')
@@ -179,15 +179,26 @@ def rea(scope_path, target, kind, executable, version, execute=False):
     command_path = Path(executable)
     if not command_path.is_absolute() or not command_path.is_file():
         raise ValueError('choose an existing absolute REA executable path; no automatic install')
-    command = ([str(command_path), 'analyze-javascript-application', str(target_path), '--json']
+    if command_path.suffix.lower() in {'.cmd', '.bat'}:
+        raise ValueError('use --node with the REA .mjs entry point instead of a shell wrapper')
+    launcher = [str(command_path)]
+    if node is not None:
+        node_path = Path(node)
+        if (not node_path.is_absolute() or not node_path.is_file()
+                or node_path.suffix.lower() in {'.cmd', '.bat'}):
+            raise ValueError('--node must be an existing absolute native Node executable')
+        if command_path.suffix.lower() != '.mjs':
+            raise ValueError('--node requires the REA .mjs entry point')
+        launcher = [str(node_path), str(command_path)]
+    command = (launcher + ['analyze-javascript-application', str(target_path), '--json']
                if kind == 'javascript' else
-               [str(command_path), 'inspect', str(target_path), '--provider', 'ghidra', '--format', 'json'])
+               launcher + ['inspect', str(target_path), '--provider', 'ghidra', '--format', 'json'])
     result = {'status': 'planned', 'command': command, 'expected_version': version,
               'target_sha256': sha256(target_path), 'scope': gate,
               'limitation': 'static provider execution is not a sandbox; results may contain sensitive content'}
     if not execute:
         return result
-    observed = subprocess.run([str(command_path), '--version'], capture_output=True,
+    observed = subprocess.run(launcher + ['--version'], capture_output=True,
                               text=True, timeout=30, check=True)
     # Accept the plain CLI version or a labelled `rea[-agents] X.Y.Z` line only.
     if not re.fullmatch(r'(?:rea(?:-agents)?\s+)?' + re.escape(version), observed.stdout.strip()):
@@ -220,6 +231,7 @@ def main():
     adapter.add_argument('--kind', choices=['javascript', 'native'], required=True)
     adapter.add_argument('--executable', required=True)
     adapter.add_argument('--version', required=True)
+    adapter.add_argument('--node', help='absolute native Node executable for a REA .mjs entry point')
     adapter.add_argument('--execute', action='store_true')
     args = parser.parse_args()
     try:
@@ -232,7 +244,7 @@ def main():
         elif args.command == 'check-scope':
             result = check_scope(read_json(args.scope), args.action, args.asset)
         else:
-            result = rea(args.scope, args.target, args.kind, args.executable, args.version, args.execute)
+            result = rea(args.scope, args.target, args.kind, args.executable, args.version, args.execute, args.node)
         print(json.dumps(result, ensure_ascii=False, indent=2))
         return 1 if result.get('valid') is False or result.get('status') == 'failed' else 0
     except (OSError, ValueError, KeyError, TypeError, subprocess.SubprocessError) as error:

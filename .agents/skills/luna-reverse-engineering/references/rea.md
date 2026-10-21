@@ -7,7 +7,7 @@ Supported commands are fixed argument arrays with no shell evaluation:
 - JavaScript: `rea analyze-javascript-application ABSOLUTE_FILE --json`
 - Native: `rea inspect ABSOLUTE_FILE --provider ghidra --format json`
 
-Execution checks the CLI version, repeats sample scope admission, captures the exit status/output, and checks the source digest again. Timeout is 30 seconds for the version probe and 360 seconds for analysis. Failures and missing providers remain explicit; never silently switch engines. On Windows choose an executable supported by Python's direct process creation; npm `.cmd` wrappers are not supported by this adapter. Use a verified POSIX environment for the current integration. Windows native/provider acceptance is still unverified here.
+Execution checks the CLI version, repeats sample scope admission, captures the exit status/output, and checks the source digest again. Timeout is 30 seconds for the version probe and 360 seconds for analysis. Failures and missing providers remain explicit; never silently switch engines. For a packaged script on Windows or POSIX, pass the absolute native Node executable with `--node` and the absolute REA `scripts/rea.mjs` with `--executable`. The adapter uses `[node, entry, ...args]` without a shell and rejects `.cmd`/`.bat` wrappers. Native/Ghidra acceptance remains separate from JavaScript ASAR acceptance. See `integrations/codex/README.md` for opt-in installation and Codex usage.
 
 Scope admission requires an exact existing regular-file path and SHA-256. Directory input is intentionally excluded because hashing one file would not bind a mutable directory tree. These checks assume stable, analyst-controlled files, directories, and installations. They do not prevent concurrent replacement, malicious providers, network access by a provider, or resource exhaustion beyond the wall-clock timeout. The adapter is not a sandbox or an authenticity verifier for the executable.
 
@@ -20,4 +20,4 @@ Primary sources (recheck against the selected release):
 - https://github.com/morluto/rea/blob/main/docs/windows-ghidra-p0.md
 - https://github.com/morluto/rea/blob/main/SECURITY.md
 
-The real JavaScript CLI acceptance attempt and host blocker are recorded for 6.7.0 in `docs/SECURITY_OPS_VALIDATION.ko.md`; this is an observed test version, not a mandatory latest-version claim or an automatic update policy.
+Historical host failure and successful real Windows/Linux ASAR acceptance are recorded for 6.7.0 in `docs/SECURITY_OPS_VALIDATION.ko.md`; this is an observed test version, not a mandatory latest-version claim or an automatic update policy.

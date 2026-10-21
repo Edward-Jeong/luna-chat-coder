@@ -66,3 +66,33 @@ Doctor의 기존 겹침/대형 스킬 경고 및 `docs/luna/CORE_ENGINEERING_PRO
 - REA CLI·설치·보안 경계: https://github.com/morluto/rea
 
 reverse-skill의 동작 규칙 전체, GPLv3 CTF 모듈 및 외부 공격 도구 코드는 포함하지 않았습니다. REA 런타임도 저장소에 포함하지 않습니다.
+
+## 2026-10-21 재검증 및 Codex 연결
+
+PR #11 병합 main `523cc3eac5f825964e087e56c9a52eac3101afbf`에서 재개했습니다. 위 2026-10-20 실패 기록은 당시 환경의 관측 사실로 유지하며, 아래 재검증 결과와 구분합니다.
+
+- 동일 샌드박스에서는 REA process-ownership 오류가 다시 발생했습니다. 보안 검사나 격리 설정을 우회하지 않고 GitHub Actions의 실제 OS 러너로 검증을 옮겼습니다.
+- 최초 원격 실행: https://github.com/Edward-Jeong/luna-chat-coder/actions/runs/39518820185 (분석 대상 소스 `07df5094e83506db6662b9aa414d97675f77d828`). Ubuntu 24.04에서 REA 6.7.0 분석 성공과 `portal.js`의 `parse_status=complete`를 확인했습니다. 샘플을 실행하지 않았습니다.
+- 같은 실행의 Windows 2022는 기존 정책 업데이트 테스트가 Windows 경로 구분자를 그대로 비교해 실패했습니다. 실제 정책은 POSIX 형식 경로를 의도적으로 기록하므로 기대값을 `Path.as_posix()`로 수정했습니다. 정책 업데이트 런타임이나 검증 기준을 완화하지 않았습니다. Windows REA는 해당 실행에서 수행되지 않았습니다.
+- Windows/POSIX 공용으로 `--node ABSOLUTE_NODE --executable ABSOLUTE_REA_MJS`를 추가했습니다. shell 없이 인수 배열을 전달하고 `.cmd`/`.bat`를 거절합니다. 계획 호출에는 버전 조회를 포함한 프로세스 실행이 없습니다.
+- `Luna Reverse Engineer` 선택형 에이전트를 추가했습니다. 임시 Codex 홈에서 설치 도구가 새 정의를 설치하는 것과 TOML 7개 파싱을 확인했습니다. 사용자 PC에 설치했거나 실제 Codex 모델 세션에서 실행했다고 주장하지 않습니다.
+- Windows 최종 재검증과 독립 리뷰 결과는 후속 기록에 추가합니다. 네이티브/Ghidra·MCP 등록·JAR/WAR·macOS는 이번 검증 범위에 포함하지 않습니다.
+
+Codex 사용·1회 설치 명령은 `integrations/codex/README.md`의 REA 절을 참고하십시오. 동일 에이전트 파일의 사용자 수정은 기존 설치 도구의 보존 정책을 따릅니다.
+
+### 최종 재검증 결과 (2026-10-21)
+
+[최종 실제 실행 39519035740](https://github.com/Edward-Jeong/luna-chat-coder/actions/runs/39519035740)의 두 작업이 모두 성공했습니다. 검증한 소스 커밋은 `8b070b66343d9eedeb505167c3a8eadd68f25bf3`, Git tree는 `cb867bb03cffaaac8b6b0d42355238e4f51ebe06`입니다. 이 절을 추가하는 후속 변경은 검증 기록·참조 문구만 수정하며 실행 코드와 검증 입력은 같습니다.
+
+| 환경 | 회귀 테스트 | 실제 REA 6.7.0 ASAR 분석 |
+| --- | --- | --- |
+| Ubuntu 24.04 / Node 24.19.0 / Python 3.11 | 28/28 통과, 건너뜀 없음 | 종료코드 0, `portal.js` 파싱 complete |
+| Windows Server 2022 / Node 24.19.0 / Python 3.11 | 28/28 통과, 건너뜀 없음 | 종료코드 0, `portal.js` 파싱 complete |
+
+원격 로그의 성공 표식은 각각 `REA_ACCEPTANCE_OK Linux 6.7.0`과 `REA_ACCEPTANCE_OK Windows 6.7.0`이며 동일 샘플 SHA-256과 일치합니다. 단순 패키지 시작이나 종료코드만 확인한 것이 아니라 결과 그래프의 대상 파일 파싱 완료를 검사했습니다. 결과에는 동적 호출 등의 미해결 의미 관계도 남아 있으므로 런타임 동작이나 의미 관계 전체의 복원을 보장하지 않습니다.
+
+Windows 러너에서 PowerShell 에이전트 설치 테스트도 실제 실행됐습니다. 7개 TOML 정의의 검사와 새 reverse 에이전트 설치·기존 사용자 정의 보존은 해당 설치 계약 테스트 범위입니다. 실제 사용자 PC 설치나 Codex 모델 세션 내 실행, 모든 Codex 제품 표면의 named-agent 지원까지 검증한 것은 아닙니다.
+
+독립 리뷰는 동작·보안과 코드베이스 적합성을 구분해 수행했고, 리뷰어도 최종 원격 로그·정확한 소스 SHA·28개 테스트와 실제 파싱 성공을 확인했습니다. 범위 내 남은 BLOCKER/IMPORTANT는 발견되지 않았습니다. 현재 변경은 **ASAR 정적 분석 및 Codex 진입점 범위에서 merge-ready**입니다. 위 2026-10-20의 review-ready 판정은 당시 실패 상태에 대한 역사 기록이며 이 최종 결과가 현재 ASAR 범위의 준비 상태를 대체합니다. PR #12는 자동 병합하지 않습니다.
+
+샌드박스 자체의 process-ownership 오류는 그대로이며 우회하지 않았습니다. 전체 분석 성공 근거는 실제 GitHub Actions OS 러너입니다. 네이티브/Ghidra, MCP 연결, JAR/WAR, 실제 고객 앱, macOS는 여전히 별도 검증 대상입니다.

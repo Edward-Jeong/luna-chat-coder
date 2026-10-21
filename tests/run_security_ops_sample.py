@@ -17,9 +17,12 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--rea', help='absolute trusted REA executable; executes static analysis when supplied')
     parser.add_argument('--version', help='exact installed version, required with --rea')
+    parser.add_argument('--node', help='absolute native Node executable with REA .mjs')
     args = parser.parse_args()
     if bool(args.rea) != bool(args.version):
         parser.error('--rea and --version must be supplied together')
+    if args.node and not args.rea:
+        parser.error('--node requires --rea')
     cases = ops.read_json(ROOT / '.agents/skills/luna-security-ops/tests/routing-cases.json')['cases']
     failures = [c for c in cases if ops.route(c['input'])['primary'] != c['expected']]
     with tempfile.TemporaryDirectory(prefix='luna-security-sample-') as temp:
@@ -45,9 +48,19 @@ def main():
                   'evidence_valid_before': before, 'evidence_tamper_detected': tamper_detected,
                   'sample_sha256': ops.sha256(sample), 'rea': {'status': 'not_run'}}
         if args.rea:
-            result['rea'] = ops.rea(scope_file, sample, 'javascript', args.rea, args.version, True)
+            result['rea'] = ops.rea(scope_file, sample, 'javascript', args.rea, args.version, True, args.node)
+            # Exit zero alone does not establish that the static parser completed.
+            output = json.loads(result['rea'].get('stdout', '{}'))
+            observations = [observation for item in output.get('normalized_result', {}).get('graph', {}).get('nodes', [])
+                            for observation in item.get('observations', [])]
+            parsed = any(o.get('label') == 'portal.js'
+                         and o.get('properties', {}).get('parse_status') == 'complete'
+                         for o in observations)
+            result['rea']['sample_parse_complete'] = parsed
         print(json.dumps(result, ensure_ascii=False, indent=2))
-        return 1 if failures or not before or not tamper_detected or result['rea']['status'] == 'failed' else 0
+        return 1 if (failures or not before or not tamper_detected
+                     or result['rea']['status'] == 'failed'
+                     or (args.rea and not result['rea']['sample_parse_complete'])) else 0
 
 
 if __name__ == '__main__':
