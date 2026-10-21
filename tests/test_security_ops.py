@@ -144,6 +144,32 @@ class SecurityOpsTests(unittest.TestCase):
             with patch.object(ops.subprocess, 'run', side_effect=outcomes):
                 self.assertEqual(ops.rea(scope, target, 'native', sys.executable, '6.7.0', True)['status'], 'failed')
 
+    def test_node_entry_launch_uses_argument_arrays_and_plan_has_no_side_effects(self):
+        with tempfile.TemporaryDirectory(prefix='rea paths ') as temp:
+            root = Path(temp)
+            target = root / 'portal.asar'
+            target.write_bytes(b'synthetic fixture')
+            entry = root / 'rea.mjs'
+            entry.write_text('// synthetic launcher placeholder')
+            scope = root / 'scope.json'
+            scope.write_text(json.dumps(self.sample_scope(target)))
+            with patch.object(ops.subprocess, 'run', side_effect=AssertionError('plan executed')):
+                plan = ops.rea(scope, target, 'javascript', entry, '6.7.0', node=sys.executable)
+            self.assertEqual(plan['command'][:2], [sys.executable, str(entry)])
+            outcomes = [subprocess.CompletedProcess([], 0, '6.7.0\n', ''),
+                        subprocess.CompletedProcess([], 0, '{}', '')]
+            with patch.object(ops.subprocess, 'run', side_effect=outcomes) as run:
+                ops.rea(scope, target, 'javascript', entry, '6.7.0', True, sys.executable)
+                self.assertEqual(run.call_args_list[0].args[0], [sys.executable, str(entry), '--version'])
+                self.assertEqual(run.call_args_list[1].args[0], plan['command'])
+                self.assertNotIn('shell', run.call_args_list[1].kwargs)
+            wrapper = root / 'rea.cmd'
+            wrapper.write_text('echo wrapper')
+            with self.assertRaisesRegex(ValueError, 'shell wrapper'):
+                ops.rea(scope, target, 'javascript', wrapper, '6.7.0')
+            with self.assertRaisesRegex(ValueError, 'native Node'):
+                ops.rea(scope, target, 'javascript', entry, '6.7.0', node=wrapper)
+
     def test_cli_failures_are_machine_readable(self):
         result = subprocess.run([sys.executable, str(SCRIPT), 'verify-case', '/nonexistent/luna-case'],
                                 capture_output=True, text=True)
