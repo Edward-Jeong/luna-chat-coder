@@ -20,4 +20,4 @@ Primary sources (recheck against the selected release):
 - https://github.com/morluto/rea/blob/main/docs/windows-ghidra-p0.md
 - https://github.com/morluto/rea/blob/main/SECURITY.md
 
-The real JavaScript CLI acceptance attempt and host blocker are recorded for 6.7.0 in `docs/SECURITY_OPS_VALIDATION.ko.md`; this is an observed test version, not a mandatory latest-version claim or an automatic update policy.
+Historical host failure and successful real Windows/Linux ASAR acceptance are recorded for 6.7.0 in `docs/SECURITY_OPS_VALIDATION.ko.md`; this is an observed test version, not a mandatory latest-version claim or an automatic update policy.
