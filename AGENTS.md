@@ -11,6 +11,7 @@ Load only the policy relevant to the task:
 - Public web content intended for search discovery: `.agents/skills/luna-search-visibility/SKILL.md`. Exclude private/admin/internal/closed-network and backend/CLI-only surfaces; classify mixed routes separately. Never weaken private boundaries for discoverability.
 - Concrete security domain assessment or evidence/tool handoff: `.agents/skills/luna-security-ops/SKILL.md`. For requested implementation-artifact reverse analysis only, load `.agents/skills/luna-reverse-engineering/SKILL.md`; REA remains optional and is never installed or registered automatically.
 - Explicit Luna health audit or `$doctor`: `.agents/skills/doctor/SKILL.md` on demand.
+- Explicit structured learning, quizzes, or mastery practice only: `.agents/skills/luna-socratic-tutor/SKILL.md`. Do not load for ordinary explanations, development, incident response, security assessment, or requirements grilling.
 
 Reading a policy does not require every specialist or GitHub Actions. Use exact GitHub state, preserve unrelated work, and use the sandbox when sufficient. Each project defines its runtime, architecture, dependencies, and checks.
 
