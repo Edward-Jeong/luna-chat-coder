@@ -199,6 +199,11 @@ def aggregate(rows: list[dict]) -> dict:
 
 
 def cli(argv: list[str] | None = None) -> int:
+    # Older Windows terminals use legacy code pages; never crash while printing
+    # Korean task descriptions or multilingual agent output.
+    for stream in (sys.stdout, sys.stderr):
+        if hasattr(stream, "reconfigure"):
+            stream.reconfigure(errors="backslashreplace")
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--metrics-file", type=Path, default=DEFAULT_METRICS)
     sub = parser.add_subparsers(dest="command", required=True)
@@ -244,18 +249,18 @@ def cli(argv: list[str] | None = None) -> int:
                                 failed_runs=args.failed_runs, failure_reason=args.failure_reason,
                                 history=rows, adaptive=not args.no_adaptive and not invalid)
         if args.command == "plan":
-            print(json.dumps(decision, ensure_ascii=False, indent=2))
+            print(json.dumps(decision, ensure_ascii=True, indent=2))
             return 0
         command = [args.codex_bin, "exec", "--json", "-m", decision["model"],
                    "-c", f'model_reasoning_effort="{decision["reasoning_effort"]}"', args.task]
         if args.dry_run:
-            print(json.dumps({"decision": decision, "command": command, "dry_run": True}, ensure_ascii=False, indent=2))
+            print(json.dumps({"decision": decision, "command": command, "dry_run": True}, ensure_ascii=True, indent=2))
             return 0
-        print(json.dumps({"decision": decision}, ensure_ascii=False), file=sys.stderr)
+        print(json.dumps({"decision": decision}, ensure_ascii=True), file=sys.stderr)
         run_id = str(uuid.uuid4())
         count = 0
         totals = defaultdict(int)
-        proc = subprocess.Popen(command, cwd=args.cwd, stdout=subprocess.PIPE, text=True, errors="replace")
+        proc = subprocess.Popen(command, cwd=args.cwd, stdout=subprocess.PIPE, text=True, encoding="utf-8", errors="replace")
         assert proc.stdout is not None
         for line in proc.stdout:
             try:
@@ -284,7 +289,7 @@ def cli(argv: list[str] | None = None) -> int:
         append_metric(args.metrics_file, entry)
         print(json.dumps({"run_id": run_id, "exit_code": exit_code, "usage": usage,
                           "api_equivalent_usd_estimate": entry["api_equivalent_usd"],
-                          "verification": "unverified"}, ensure_ascii=False), file=sys.stderr)
+                          "verification": "unverified"}, ensure_ascii=True), file=sys.stderr)
         return exit_code
     except (OSError, ValueError) as exc:
         print(f"luna router: {exc}", file=sys.stderr)
