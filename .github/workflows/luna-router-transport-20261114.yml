@@ -25,7 +25,7 @@ jobs:
           from pathlib import Path
           import base64, hashlib, io, subprocess, tarfile
           base = subprocess.check_output(["git","rev-parse","HEAD~2"], text=True).strip()
-          assert base == "80f41f3bdd8c1b9f4d390481ce877123c6d2e22c", f"unexpected base: {base}"
+          assert base == "18c577f7beb55f29b02ba8524be371561449cf6", f"unexpected transport chain: {base}"
           artifact = Path(".luna-router-transport-20261114.b64")
           packed = base64.b64decode(artifact.read_text(), validate=True)
           assert hashlib.sha256(packed).hexdigest() == "e70897c18f9bcc1e278b0c1e9e0fef073626d6c649b9a705e3fe17a8721fa934"
@@ -41,7 +41,7 @@ jobs:
                   dest.write_bytes(archive.extractfile(member).read())
           p = Path("AGENTS.md")
           s = p.read_text()
-          assert "Core Engineering Protocol" in s and "Cost-Aware Model Router" not in s
+          assert "docs/CORE_ENGINEERING_PROTOCOL_V2.md" in s and "Cost-Aware Model Router" not in s
           p.write_text(s + "\n## Optional cost-aware Codex main-model routing\n\nFor optional automatic main-model selection before a new Codex CLI run, use python3 scripts/luna_model_router.py run TASK. See docs/MODEL_ROUTING.ko.md. It does not change an already-running Codex session and never replaces Luna team routing or verification policy. Do not claim verified success solely from a Codex process exit code.\n")
           p = Path("integrations/codex/README.md")
           s = p.read_text()
