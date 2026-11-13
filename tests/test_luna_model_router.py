@@ -36,6 +36,17 @@ class DecisionTests(unittest.TestCase):
     def test_critical_coding_uses_astra(self):
         self.assertEqual(router.select_model("인증 로직 구현", risk="critical")["model"], "gpt-6-astra")
 
+    def test_unknown_intent_falls_back_to_sol(self):
+        self.assertEqual(router.select_model("운영 포털을 편리하게 바꿔 줘")["model"], "gpt-6.1-sol")
+
+    def test_korean_development_requests_route_to_coding(self):
+        d = router.select_model("관리 포털을 만들어 줘")
+        self.assertEqual((d["kind"], d["model"]), ("coding", "gpt-6.1-sol"))
+
+    def test_auth_and_design_risk_signals(self):
+        self.assertEqual(router.select_model("인증 로직 구현")["reasoning_effort"], "high")
+        self.assertEqual(router.select_model("시스템 설계 변경")["kind"], "architecture")
+
     def test_unverified_failures_never_escalate(self):
         self.assertEqual(router.select_model("신규 기능 개발", failed_runs=4, failure_reason="environment")["model"], "gpt-6.1-sol")
         self.assertEqual(router.select_model("신규 기능 개발", failed_runs=4)["model"], "gpt-6.1-sol")
