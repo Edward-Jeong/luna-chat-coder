@@ -117,6 +117,17 @@ class CliTests(unittest.TestCase):
         self.assertIn("gpt-6-luna", result.stdout)
         self.assertFalse(self.metrics.exists())
 
+    def test_ascii_stdout_keeps_korean_plan_json_valid(self):
+        env = dict(os.environ, PYTHONIOENCODING="ascii")
+        result = subprocess.run(
+            [sys.executable, str(MOD), "--metrics-file", str(self.metrics),
+             "plan", "비정상 패키지 업데이트 실패 원인 분석"],
+            capture_output=True, text=True, env=env,
+        )
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertEqual(json.loads(result.stdout)["model"], "gpt-6.1-sol")
+        self.assertFalse(self.metrics.exists())
+
     @unittest.skipIf(os.name == "nt", "POSIX test stub requires a shebang; Windows covered by pure routing tests")
     def test_fake_codex_captures_aggregate_usage_no_prompt(self):
         fake = self.base / "fake_codex.py"
