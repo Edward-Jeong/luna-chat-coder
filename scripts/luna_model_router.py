@@ -33,10 +33,10 @@ DEFAULT_METRICS = Path.home() / ".codex" / "luna" / "usage.jsonl"
 
 PATTERNS = {
     "reverse": r"역공학|디컴파일|바이너리 분석|리버스 엔지니어링|reverse.engineer|decompil",
-    "architecture": r"아키텍처|재설계|전체 구조|architecture|refactor|migration|마이그레이션|설계 변경",
-    "incident": r"장애|실패 원인|오류 분석|원인 분석|디버깅|incident|root cause|debug|outage|원인 추적",
-    "security": r"취약점|보안 진단|권한 상승|인증 우회|침투|공격|exploit|vulnerability|security review|cve-|sast|인증/인가",
-    "coding": r"구현|개발|코드|수정|테스트|스크립트|기능 추가|fix|implement|code|test|patch|pull request|\bpr\b",
+    "architecture": r"아키텍처|재설계|전체 구조|설계|architecture|refactor|migration|마이그레이션",
+    "incident": r"장애|실패 원인|오류 분석|원인 분석|로그 분석|디버깅|incident|root cause|debug|outage|원인 추적",
+    "security": r"취약점|보안 진단|권한 상승|인증 우회|인증|인가|접근제어|침투|공격|exploit|vulnerability|security review|cve-|sast|authentication|authorization|\brbac\b|\boauth\b",
+    "coding": r"구현|개발|코드|수정|테스트|스크립트|기능 추가|만들어|구축|제작|생성|fix|implement|create|build|develop|code|test|patch|pull request|\bpr\b",
 }
 ROUTINE = re.compile(r"요약|정리|초안|번역|format|summari|draft|translate|리스트|목록", re.I)
 HEAVY = re.compile(r"복합|다중|전체|대규모|critical|high.risk|high severity|근본 원인|복잡|massive|cross.system", re.I)
@@ -93,7 +93,7 @@ def select_model(task: str, *, kind: str | None = None, risk: str = "auto", file
     complex_task = bool(HEAVY.search(task)) or files >= 12
     # An explicit critical/high-risk call raises the floor. Not every CVE mention needs Astra.
     if category == "routine":
-        tier, effort = (0, "low") if ROUTINE.search(task) and len(task) < 400 and files <= 1 else (1, "low")
+        tier, effort = (0, "low") if ROUTINE.search(task) and len(task) < 400 and files <= 1 else (2, "medium")
     elif category == "coding":
         tier, effort = (1, "medium") if files <= 1 and not complex_task and risk == "low" else (2, "medium")
     elif category in ("incident", "security"):
