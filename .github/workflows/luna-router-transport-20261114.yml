@@ -1,0 +1,73 @@
+name: Luna model-router exact transport 20261114
+on:
+  push:
+    branches:
+      - feat/luna-cost-aware-model-router-20261114
+    paths:
+      - .github/workflows/luna-router-transport-20261114.yml
+permissions:
+  contents: write
+jobs:
+  materialize:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: true
+          fetch-depth: 3
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
+        with:
+          python-version: '3.11'
+      - name: Verify base and checked payload, materialize exactly
+        shell: python
+        run: |
+          from pathlib import Path
+          import base64, hashlib, io, subprocess, tarfile
+          base = subprocess.check_output(["git","rev-parse","HEAD~2"], text=True).strip()
+          assert base == "80f41f3bdd8c1b9f4d390481ce877123c6d2e22c", f"unexpected base: {base}"
+          artifact = Path(".luna-router-transport-20261114.b64")
+          packed = base64.b64decode(artifact.read_text(), validate=True)
+          assert hashlib.sha256(packed).hexdigest() == "e70897c18f9bcc1e278b0c1e9e0fef073626d6c649b9a705e3fe17a8721fa934"
+          with tarfile.open(fileobj=io.BytesIO(packed), mode="r:gz") as archive:
+              names = {x.name for x in archive.getmembers()}
+              expected = {"scripts/luna_model_router.py","tests/test_luna_model_router.py","docs/MODEL_ROUTING.ko.md",".github/workflows/luna-model-routing.yml"}
+              assert names == expected, names
+              for member in archive.getmembers():
+                  assert member.isfile() and member.name in expected
+                  dest = Path(member.name)
+                  assert not dest.exists(), f"will not overwrite existing file: {dest}"
+                  dest.parent.mkdir(parents=True, exist_ok=True)
+                  dest.write_bytes(archive.extractfile(member).read())
+          p = Path("AGENTS.md")
+          s = p.read_text()
+          assert "Core Engineering Protocol" in s and "Cost-Aware Model Router" not in s
+          p.write_text(s + "\n## Optional cost-aware Codex main-model routing\n\nFor optional automatic main-model selection before a new Codex CLI run, use python3 scripts/luna_model_router.py run TASK. See docs/MODEL_ROUTING.ko.md. It does not change an already-running Codex session and never replaces Luna team routing or verification policy. Do not claim verified success solely from a Codex process exit code.\n")
+          p = Path("integrations/codex/README.md")
+          s = p.read_text()
+          assert "Optional custom-agent integration" in s and "Cost-Aware Model Router" not in s
+          p.write_text(s + "\n## Optional Cost-Aware Model Router\n\n메인 모델을 실행 전에 선택하려면 python3 scripts/luna_model_router.py run TASK를 사용합니다. 기본 Codex 대화에서는 AGENTS.md만으로 실행 중인 메인 모델을 변경할 수 없습니다. 검증 결과를 구분한 토큰 기록과 승격 정책은 docs/MODEL_ROUTING.ko.md를 참고하세요.\n")
+          p = Path("integrations/codex/agents/luna-router.toml")
+          s = p.read_text()
+          assert s.count('"""') == 2
+          marker = 'Do not merge/deploy beyond the authorized scope.'
+          assert marker in s
+          s = s.replace(marker, marker + ' For optional cost-aware selection of the next Codex CLI main-model run, prefer the explicit scripts/luna_model_router.py entry point and docs/MODEL_ROUTING.ko.md; this agent policy cannot silently switch the active main model. Only verified outcomes may inform model quality metrics.')
+          p.write_text(s)
+          Path(".luna-router-transport-20261114.b64").unlink()
+          Path(".github/workflows/luna-router-transport-20261114.yml").unlink()
+          print("PAYLOAD_SHA256_OK", hashlib.sha256(packed).hexdigest())
+      - name: Python regression tests
+        run: python -m unittest discover -s tests -v
+      - name: Python syntax and repository diff validation
+        run: |
+          python -m py_compile scripts/luna_model_router.py
+          git diff --check
+      - name: Commit verified exact changes
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git diff --cached --check
+          git commit -m "feat: add cost-aware Codex model routing and verified usage metrics"
+          git push origin HEAD:feat/luna-cost-aware-model-router-20261114
