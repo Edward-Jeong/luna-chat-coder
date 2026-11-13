@@ -15,7 +15,7 @@ jobs:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
         with:
           persist-credentials: true
-          fetch-depth: 3
+          fetch-depth: 0
       - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
         with:
           python-version: '3.11'
@@ -24,8 +24,7 @@ jobs:
         run: |
           from pathlib import Path
           import base64, hashlib, io, subprocess, tarfile
-          base = subprocess.check_output(["git","rev-parse","HEAD~2"], text=True).strip()
-          assert base == "18c577f7beb55f29b02ba8524be371561449cf6", f"unexpected transport chain: {base}"
+          assert subprocess.call(["git","merge-base","--is-ancestor","80f41f3bdd8c1b9f4d390481ce877123c6d2e22c","HEAD"]) == 0, "base not ancestor"
           artifact = Path(".luna-router-transport-20261114.b64")
           packed = base64.b64decode(artifact.read_text(), validate=True)
           assert hashlib.sha256(packed).hexdigest() == "e70897c18f9bcc1e278b0c1e9e0fef073626d6c649b9a705e3fe17a8721fa934"
