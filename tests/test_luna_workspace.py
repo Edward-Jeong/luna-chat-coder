@@ -128,7 +128,7 @@ class WorkspaceTests(unittest.TestCase):
         subprocess.run(["git", "init", "-q", str(self.project1)], check=True)
         child = self.project1 / "src"
         child.mkdir()
-        self.assertEqual(workspace.project_root(child), self.project1)
+        self.assertTrue(os.path.samefile(workspace.project_root(child), self.project1))
 
     def test_global_history_is_shared_between_projects(self):
         self.events = self.events_for("thread-share-1")
