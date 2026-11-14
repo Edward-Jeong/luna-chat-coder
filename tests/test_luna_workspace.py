@@ -16,8 +16,15 @@ sys.path.insert(0, str(ROOT / "scripts"))
 import luna_workspace as workspace
 
 
+class CaptureInput(io.StringIO):
+    def close(self):
+        self.captured = self.getvalue()
+        super().close()
+
+
 class FakeProcess:
     def __init__(self, events, code=0):
+        self.stdin = CaptureInput()
         self.stdout = io.StringIO("\n".join(json.dumps(x, ensure_ascii=False) for x in events) + "\n")
         self.code = code
 
@@ -49,12 +56,15 @@ class WorkspaceTests(unittest.TestCase):
                                        failure_reason="unknown", no_adaptive=False,
                                        codex_bin="codex", plan=False, dry_run=False)
         self.calls = []
+        self.processes = []
         self.events = []
         self.return_code = 0
 
     def fake_popen(self, command, cwd=None, **kwargs):
         self.calls.append((command, cwd, kwargs))
-        return FakeProcess(self.events, self.return_code)
+        process = FakeProcess(self.events, self.return_code)
+        self.processes.append(process)
+        return process
 
     def call(self, prompt, project=None):
         with patch.object(workspace.subprocess, "Popen", side_effect=self.fake_popen), \
@@ -154,7 +164,10 @@ class WorkspaceTests(unittest.TestCase):
         task = '신규 기능 개발; echo BAD && $(rm -rf /)'
         self.events = self.events_for("thread-safe-123")
         self.assertEqual(self.call(task), 0)
-        self.assertEqual(self.calls[0][0][-1], task)
+        self.assertEqual(self.calls[0][0][-1], "-")
+        self.assertNotIn(task, self.calls[0][0])
+        self.assertEqual(self.processes[0].stdin.captured, task)
+        self.assertEqual(self.calls[0][2]["stdin"], subprocess.PIPE)
         self.assertNotIn("shell", self.calls[0][2])
 
 
