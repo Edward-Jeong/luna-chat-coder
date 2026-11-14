@@ -154,7 +154,13 @@ def run_turn(task: str, project: Path, home: Path, metrics: Path,
                 item = event.get("item")
                 if event.get("type") == "item.completed" and isinstance(item, dict):
                     if item.get("type") == "agent_message" and isinstance(item.get("text"), str):
-                        print(item["text"], flush=True)
+                        try:
+                            print(item["text"], flush=True)
+                        except UnicodeEncodeError:
+                            # Legacy Windows CI/terminals may use cp1252 instead of UTF-8.
+                            encoding = getattr(sys.stdout, "encoding", None) or "utf-8"
+                            escaped = item["text"].encode(encoding, errors="backslashreplace").decode(encoding)
+                            print(escaped, flush=True)
             exit_code = process.wait()
         if previous.get("thread_id") and started_thread and previous["thread_id"] != started_thread:
             print("[Luna] Codex resumed an unexpected thread; preserving previous session pointer", file=sys.stderr)
