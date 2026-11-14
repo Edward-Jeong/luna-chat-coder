@@ -176,3 +176,7 @@ macOS의 위 명령은 사용 절차이며 실제 macOS 공급자 검증 결과�
 Named agent가 지원되는 Codex에서는 기존 설치 명령으로 `Luna Reverse Engineer`도 추가할 수 있습니다. 같은 이름의 기존 파일은 보존하므로 기존 사용자 정의를 갱신하려면 별도 diff 검토가 필요합니다. 전용 agent만 다른 프로젝트에 설치해도 해당 프로젝트의 스킬·실행 도구가 자동 복사되지는 않습니다. 기존 프로젝트에는 해당 스킬과 Security Ops helper를 먼저 검토해 포함하거나, 그 프로젝트의 승인된 도구를 사용하십시오.
 
 이 통합은 선택형 CLI 방식입니다. Codex MCP 등록·전역 설정을 변경하지 않으며, 에이전트 선택만으로 139개 이상의 REA 도구를 모든 작업에 상시 노출하지 않습니다. Ghidra/네이티브와 JAR/WAR 및 런타임 후킹 지원은 이번 ASAR 정적 분석 검증과 구분합니다.
+
+## Optional Cost-Aware Model Router
+
+메인 모델을 실행 전에 선택하려면 python3 scripts/luna_model_router.py run TASK를 사용합니다. 기본 Codex 대화에서는 AGENTS.md만으로 실행 중인 메인 모델을 변경할 수 없습니다. 검증 결과를 구분한 토큰 기록과 승격 정책은 docs/MODEL_ROUTING.ko.md를 참고하세요.

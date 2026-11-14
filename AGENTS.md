@@ -16,3 +16,7 @@ Load only the policy relevant to the task:
 Reading a policy does not require every specialist or GitHub Actions. Use exact GitHub state, preserve unrelated work, and use the sandbox when sufficient. Each project defines its runtime, architecture, dependencies, and checks.
 
 For template-generated UI projects, instantiate root `DESIGN.md` during setup. Existing projects do not inherit template edits automatically: use `scripts/apply-luna-policy.py` and `docs/POLICY_UPDATES.ko.md` for a reviewed update that preserves project instructions. Do not fetch or execute mutable remote policy on every task.
+
+## Optional cost-aware Codex main-model routing
+
+For optional automatic main-model selection before a new Codex CLI run, use python3 scripts/luna_model_router.py run TASK. See docs/MODEL_ROUTING.ko.md. It does not change an already-running Codex session and never replaces Luna team routing or verification policy. Do not claim verified success solely from a Codex process exit code.
