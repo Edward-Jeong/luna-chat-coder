@@ -44,7 +44,8 @@ class GlobalInstallTests(unittest.TestCase):
         installer.install(self.source, self.home, "/usr/bin/python3", windows=False)
         script = self.home / "luna" / "bin" / "luna"
         self.assertTrue(script.read_text().startswith("#!/bin/sh\nexec"))
-        self.assertTrue(script.stat().st_mode & 0o100)
+        if sys.platform != "win32":
+            self.assertTrue(script.stat().st_mode & 0o100)
 
     def test_symlinked_runtime_directory_is_rejected(self):
         if not hasattr(Path, "symlink_to"):
