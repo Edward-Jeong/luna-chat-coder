@@ -103,7 +103,9 @@ def command_for(task: str, decision: dict, thread_id: str | None, codex_binary: 
                "-c", f'model_reasoning_effort="{decision["reasoning_effort"]}"']
     if thread_id:
         command.extend(["resume", thread_id])
-    command.append(task)
+    # Codex supports PROMPT=-, which reads standard input. Never put an
+    # untrusted natural-language prompt on a Windows .cmd command line.
+    command.append("-")
     return command
 
 
@@ -132,9 +134,15 @@ def run_turn(task: str, project: Path, home: Path, metrics: Path,
         turns = 0
         # Standard Codex invocation: project-scoped AGENTS.md / skills / sandbox / approvals
         # are discovered and enforced by Codex, not reimplemented or bypassed here.
-        with subprocess.Popen(command, cwd=project, stdout=subprocess.PIPE, stderr=None,
-                              encoding="utf-8", errors="replace", text=True) as process:
-            assert process.stdout is not None
+        with subprocess.Popen(command, cwd=project, stdin=subprocess.PIPE, stdout=subprocess.PIPE,
+                              stderr=None, encoding="utf-8", errors="replace", text=True) as process:
+            assert process.stdout is not None and process.stdin is not None
+            try:
+                process.stdin.write(task)
+                process.stdin.close()
+            except BrokenPipeError:
+                # Codex may reject its model/config before reading stdin.
+                pass
             for line in process.stdout:
                 try:
                     event = json.loads(line)
