@@ -1,0 +1,31 @@
+name: Global Codex skills validation
+
+on:
+  pull_request:
+    paths:
+      - 'integrations/codex/skills/**'
+      - 'scripts/install_codex_shared_skills.py'
+      - 'tests/test_codex_shared_skills.py'
+      - '.github/workflows/global-codex-skills.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  skills:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-24.04, windows-2022]
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
+        with:
+          python-version: '3.11'
+      - run: python -m py_compile scripts/install_codex_shared_skills.py
+      - run: python -m unittest discover -s tests -p 'test_codex_shared_skills.py' -v
