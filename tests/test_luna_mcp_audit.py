@@ -67,6 +67,18 @@ class AuditTests(unittest.TestCase):
             self.skipTest("Symlink unavailable")
         self.assertEqual(module.audit(self.root)["findings"][0]["reason"], "symlink-or-escape")
 
+    def test_parent_directory_symlink_is_not_followed(self):
+        real = self.root / "real"
+        real.mkdir()
+        (real / "mcp.json").write_text("{}")
+        alias = self.root / "alias"
+        try:
+            alias.symlink_to(real, target_is_directory=True)
+        except (OSError, NotImplementedError):
+            self.skipTest("Directory symlink unavailable")
+        report = module.audit(self.root, ["alias/mcp.json"])
+        self.assertEqual(report["findings"][0]["reason"], "symlink-or-escape")
+
     def test_strict_mode_is_explicit(self):
         self.config({"a": {"command": "npx", "args": ["pkg@latest"]}})
         with redirect_stdout(StringIO()):
