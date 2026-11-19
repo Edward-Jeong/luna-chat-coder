@@ -89,7 +89,8 @@ def audit(root, configs=None):
             add("<rejected-path>", "<config>", "review", "path-outside-root")
             continue
         file = root / path
-        if file.is_symlink() or not file.resolve().is_relative_to(root):
+        if (any(root.joinpath(*path.parts[:i]).is_symlink() for i in range(1, len(path.parts) + 1))
+                or not file.resolve().is_relative_to(root)):
             add(shown, "<config>", "review", "symlink-or-escape")
             continue
         if not file.is_file():
