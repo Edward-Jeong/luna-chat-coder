@@ -23,6 +23,8 @@ Route first, then select the minimum useful gates:
 | Material external product/API/security claim | fact-check |
 | Resuming uncertain or interrupted project state | project-catchup |
 
+For consequential cross-module change impact, new MCP dependencies, or claims of improved agent reliability, consult `references/ecc-selective-adoption.md` as a conditional technique. Keep Core and existing gate ownership authoritative.
+
 For narrow low-impact edits, use targeted verification. Do not run every gate, manufacture mirror tests, introduce a new test stack, or block on stylistic preferences. Core defines bounded grilling, risk-calibrated TDD, evidence-first debugging, and the two review axes; do not duplicate their procedures here.
 
 Consult `references/engineering-disciplines.md` for behavioral test seams, discriminating diagnosis, and module-interface techniques when the Core triggers apply. This supporting reference does not add a parallel workflow.

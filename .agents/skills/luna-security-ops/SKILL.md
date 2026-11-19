@@ -32,6 +32,8 @@ Use the minimum useful records, not a mandatory report/diagram ritual. Preserve 
 
 See `docs/SECURITY_OPS.ko.md` for working examples and limitations. Routing examples in `tests/routing-cases.json` are exercised by `tests/test_security_ops.py`.
 
+For repository-local MCP package-selector review, optionally consult `.agents/skills/luna-quality-engineering/references/ecc-selective-adoption.md` and `scripts/luna_mcp_audit.py`. This is read-only evidence; it never authorizes MCP execution or expands assessment scope.
+
 ## Provenance
 
 This completes the Luna-native draft from `feature/luna-security-ops` (2026-08-26). Routing, tool inventory, and Evidence/Finding/Path concepts were reviewed against `Edward-Jeong/reverse-skill`. Luna does not vendor its skill pack, bootstrap tools automatically, require every report/diagram, or import its global behavior rules. Runtime analysis is delegated separately to an explicitly selected REA installation.

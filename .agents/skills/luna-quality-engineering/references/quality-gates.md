@@ -150,6 +150,10 @@ Use **Behavioral correctness** and **Codebase fit** as defined in Protocol v2 se
 
 Do not let one axis mask the other. If no reliable requirement source exists, disclose the acceptance-fidelity limitation and still inspect observable behavior; do not fabricate requirements or waive the rest of behavioral review.
 
+## Optional ECC-informed evidence refinements
+
+For cross-module change impact, repository MCP dependency configuration, or agent-policy performance comparisons, consult `ecc-selective-adoption.md`. These refine existing gates and do not create mandatory new stages, an alternate router, or a blanket coverage quota.
+
 ## Severity and readiness
 
 - BLOCKER: must resolve before merge-ready.
