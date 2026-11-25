@@ -180,3 +180,15 @@ Named agent가 지원되는 Codex에서는 기존 설치 명령으로 `Luna Reve
 ## Optional Cost-Aware Model Router
 
 메인 모델을 실행 전에 선택하려면 python3 scripts/luna_model_router.py run TASK를 사용합니다. 기본 Codex 대화에서는 AGENTS.md만으로 실행 중인 메인 모델을 변경할 수 없습니다. 검증 결과를 구분한 토큰 기록과 승격 정책은 docs/MODEL_ROUTING.ko.md를 참고하세요.
+
+
+## Optional user-wide prune-tests skill
+
+To make test-suite cleanup guidance available across **all local Codex projects** without changing per-project `AGENTS.md` or security rules, install the adapted `prune-tests` skill in the user's `~/.agents/skills/` directory.
+
+    python scripts/install_codex_shared_skills.py --dry-run
+    python scripts/install_codex_shared_skills.py
+
+Codex may select it for explicit test-pruning requests; use `$prune-tests` to invoke it directly. This does **not** authorize routine test deletion or override stricter project quality gates. Installation affects only the current machine/user and is not performed by merging the PR.
+
+See [the Korean global-skills guide](../../docs/GLOBAL_CODEX_SKILLS.ko.md) for Windows/macOS/Linux setup, safe upgrades, conflict handling, and uninstall.
