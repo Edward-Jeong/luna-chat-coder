@@ -7,7 +7,7 @@ import os
 import tempfile
 from pathlib import Path
 
-REVISION = "2.1"
+REVISION = "2.2"
 BEGIN = b"<!-- BEGIN LUNA MANAGED POLICY -->"
 END = b"<!-- END LUNA MANAGED POLICY -->"
 
@@ -35,8 +35,8 @@ def active_guidance(root):
 
 def block(pointer):
     return BEGIN + b"\n" + (
-        "## Luna shared engineering policy (revision 2.1)\n\n"
-        f"For material engineering work, read `{pointer}`. "
+        f"## Luna shared engineering policy (revision {REVISION})\n\n"
+        f"For codebase Q&A, onboarding, plan-only requests, or material engineering work, read `{pointer}`. "
         "It is canonical for Luna's shared workflow, verification, review independence, "
         "and readiness; older inherited Luna summaries must not redefine that contract. "
         "Preserve this project's technology choices, security boundaries, required checks, "

@@ -1,6 +1,6 @@
 # Luna Chat Coder entry point
 
-For material engineering work, read `docs/CORE_ENGINEERING_PROTOCOL_V2.md`. It is the canonical shared execution, review-independence, verification, approval, and readiness contract. Keep project-specific instructions alongside this entry point; preserve their technology choices, security boundaries, and stricter checks.
+For codebase Q&A, onboarding, plan-only requests, or material engineering work, read `docs/CORE_ENGINEERING_PROTOCOL_V2.md`. It is the canonical shared execution, review-independence, verification, approval, and readiness contract. Keep project-specific instructions alongside this entry point; preserve their technology choices, security boundaries, and stricter checks.
 
 Load only the policy relevant to the task:
 
