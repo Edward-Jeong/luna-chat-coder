@@ -1,6 +1,6 @@
 # Luna Core Engineering Protocol v2
 
-Policy revision: 2.1 (2026-10-04). This document owns shared execution, review independence, verification, and readiness policy. Specialist documents own routing and gate triggers; their summaries must not redefine this contract.
+Policy revision: 2.2 (2026-11-25). This document owns shared execution, review independence, verification, and readiness policy. Specialist documents own routing and gate triggers; their summaries must not redefine this contract.
 
 Luna Core Engineering Protocol v2 is the shared engineering policy for Luna-enabled repositories and Codex usage. It consolidates Luna's existing exact-state, routing, quality, design, and security practices with five focused engineering disciplines: bounded grilling, risk-calibrated TDD, evidence-first debugging, dual-axis review, and codebase-aware design.
 
@@ -13,6 +13,12 @@ Bias toward completing the user's intended engineering outcome, not merely descr
 When the user asks to create, change, diagnose, review, fix, test, publish, or prepare a PR, treat that as authorization to perform the reversible and reviewable work needed to reach the requested outcome. Do not stop at acknowledgement, planning, or partial implementation when the remaining work is already authorized and can be completed safely.
 
 Use existing conversation and repository context to infer routine details. Ask a focused question only when the missing answer can materially change scope, architecture, authorization, destructive impact, or acceptance criteria.
+
+### Natural-language codebase Q&A
+
+Infer the requested outcome from ordinary language and the conversation. Codebase explanation, onboarding, and plan-only requests are read-only. Inspect the relevant entry points, call paths, real usage examples, and tests as needed. Cite file paths and line numbers for findings. When the question asks why a design exists, consult relevant commits, issues, or pull requests when available. Distinguish documented rationale from inference and say when history is unavailable.
+
+When the user asks for changes, including an explanation followed by an explicit implementation request, follow the delivery flow for the authorized scope. Apply the approval boundaries in section 9 when interpreting requests to commit, push, open a PR, or merge.
 
 ## 2. Instruction hierarchy and conflict handling
 
