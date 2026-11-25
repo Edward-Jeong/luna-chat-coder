@@ -99,3 +99,7 @@ Incident Analysis still prioritizes evidence preservation and diagnosis. `projec
 The layer was inspired by selected concepts in the MIT-licensed Paperthin project (`LilMGenius/paperthin`) but is not a runtime dependency and is not a direct global installation. Luna uses its own naming, gate selection, severity model, team integration, evidence rules, and readiness contract.
 
 See `.agents/skills/luna-quality-engineering/references/provenance.md` for provenance details.
+
+## ECC selective techniques
+
+High-blast-radius change-impact evidence, read-only MCP dependency selection audit, and opt-in agent evaluation design are supported as conditional refinements. No ECC router or blanket coverage quota is installed. See [ECC selective adoption](ECC_SELECTIVE_ADOPTION.ko.md).
